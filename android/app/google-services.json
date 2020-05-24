@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1050357309254",
+    "firebase_url": "https://acnh-abb83.firebaseio.com",
+    "project_id": "acnh-abb83",
+    "storage_bucket": "acnh-abb83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050357309254:android:092107aa8a82f8e566cf47",
+        "android_client_info": {
+          "package_name": "com.tom.acnh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050357309254-fp6gpafqm2ifbf6kgg1v11uaatet2uek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7svGGm06VYhEUJdwMRaH2PGoLDGDVpz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050357309254-fp6gpafqm2ifbf6kgg1v11uaatet2uek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
