@@ -14,31 +14,13 @@ import 'page/profile/profile_page.dart';
 import 'page/turnip/prediction/turnip_prediction_page.dart';
 import 'page/turnip/turnip_page.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final app = await FirebaseApp.configure(
-    name: 'acnh',
-    options: Platform.isIOS
-        ? const FirebaseOptions(
-            googleAppID: '1:297855924061:ios:c6de2b69b03a5be8',
-            gcmSenderID: '297855924061',
-            databaseURL: 'https://acnh-abb83.firebaseio.com/',
-          ) //FIXME: Update iOS firebase setting
-        : const FirebaseOptions(
-            googleAppID: '1:1050357309254:android:092107aa8a82f8e566cf47',
-            apiKey: 'AIzaSyC7svGGm06VYhEUJdwMRaH2PGoLDGDVpz0',
-            databaseURL: 'https://acnh-abb83.firebaseio.com/',
-          ),
-  );
-
-  FirebaseService.instance.setup(app);
-
-  runApp(AcnhApp());
-}
+void main() => runApp(AcnhApp());
 
 class AcnhApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseService.instance.setup();
+
     return MultiProvider(
       providers: [ChangeNotifierProvider.value(value: AccountProvider())],
       child: MaterialApp(
@@ -98,8 +80,16 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accountProvider = context.watch<AccountProvider>();
-    return (accountProvider.currentUser == null)
-        ? LoginPage()
-        : TurnipHomePage();
+    if (accountProvider.isLoading) {
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return (accountProvider.currentUser == null)
+          ? LoginPage()
+          : TurnipHomePage();
+    }
   }
 }

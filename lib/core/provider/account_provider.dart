@@ -17,8 +17,10 @@ class SigninError extends Error {
 
 class AccountProvider extends ChangeNotifier {
   Player _userData;
+  var _isLoading = true;
 
   Player get currentUser => _userData;
+  bool get isLoading => _isLoading;
 
   AccountProvider() {
     _fetch();
@@ -28,8 +30,10 @@ class AccountProvider extends ChangeNotifier {
     _userData = await SharedPreferenceStore.instance.getUserData();
     if (_userData != null) {
       signin(_userData);
+    } else {
+      _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> signOut() async {
@@ -61,6 +65,7 @@ class AccountProvider extends ChangeNotifier {
           await FirebaseService.instance.signIn(userResponse.fbToken);
       print('SignIn firebase $authResult');
 
+      _isLoading = false;
       notifyListeners();
       return _userData;
     } else {
