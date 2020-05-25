@@ -1,5 +1,3 @@
-
-
 abstract class User {
   String get playerName;
   String get islandName;

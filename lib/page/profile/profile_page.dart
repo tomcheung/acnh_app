@@ -1,3 +1,5 @@
+import 'package:acnhpal/acnh_widget/common_widget.dart';
+import 'package:acnhpal/generated/l10n.dart';
 import 'package:flutter/material.dart' hide TextField, Card;
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +12,10 @@ import '../../core/provider/account_provider.dart';
 import 'profile_state.dart';
 
 class ProfilePage extends StatelessWidget {
-  static const String title = 'Profile';
-
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
+
     final accountProvider =
         Provider.of<AccountProvider>(context, listen: false);
     final currentUser = accountProvider.currentUser;
@@ -24,7 +26,7 @@ class ProfilePage extends StatelessWidget {
         islandName: currentUser.islandName,
       ),
       child: AcnhPage(
-        title: ProfilePage.title,
+        title: T.pageProfile,
 //        floatingActionButton: Consumer<ProfilePageState>(
 //          builder: (context, state, child) => FloatingActionButton(
 //            child: Icon(state.isEdit ? Icons.done : Icons.edit),
@@ -47,7 +49,10 @@ class ProfilePage extends StatelessWidget {
             children: <Widget>[
               _ProfilePassportCard(isEdit: false),
               RaisedButton(
-                child: Text('Signout', style: TextStyle(color: Colors.white),),
+                child: Text(
+                  T.profileLogout,
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () async {
                   await accountProvider.signOut();
                   Navigator.popAndPushNamed(context, '/');
@@ -96,6 +101,7 @@ class _ProfilePassportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     final theme = Theme.of(context);
     final state = context.watch<ProfilePageState>();
     final isEdit = state.isEdit;
@@ -129,16 +135,9 @@ class _ProfilePassportCard extends StatelessWidget {
                     color: theme.textTheme.bodyText2.color,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.info_outline),
-                  onPressed: () {
-                    showAlertMessage(
-                        context,
-                        'PIN code',
-                        'Pin code is a unique identifier associate with your account, '
-                            'you need to use this code for retrieve your account, '
-                            'or add friend with other user');
-                  },
+                HelpIconButton(
+                  alertTitle: T.loginPagePinCode,
+                  alertMessage: T.profilePinCodeDescription,
                 )
               ],
             ),

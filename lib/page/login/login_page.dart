@@ -4,14 +4,17 @@ import 'package:provider/provider.dart';
 
 import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/alert.dart';
+import '../../acnh_widget/common_widget.dart';
 import '../../core/model/player.dart';
 import '../../core/provider/account_provider.dart';
+import '../../generated/l10n.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     return AcnhPage(
-      title: 'Welcome',
+      title: T.loginPageTitle,
       showDrawer: false,
       child: Center(
         child: Container(
@@ -35,15 +38,13 @@ class _OnBoardingForm extends StatefulWidget {
 }
 
 class _OnBoardingFormState extends State<_OnBoardingForm> {
-  static const _formFieldIslandName = 'Island Name';
-  static const _formFieldPlayerName = 'Name';
-  static const _formFieldPinCode = 'Pin code';
-
   final _formKey = GlobalKey<FormState>();
   final _textEditControllerMap = <String, TextEditingController>{};
   bool _isExistingUser = false;
 
-  Widget _buildFormField(String fieldName, String hintText) {
+  Widget _buildFormField(BuildContext context, String fieldName) {
+    final T = S.of(context);
+
     if (_textEditControllerMap[fieldName] == null) {
       _textEditControllerMap[fieldName] = TextEditingController();
     }
@@ -52,12 +53,11 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
       controller: _textEditControllerMap[fieldName],
       decoration: InputDecoration(
         icon: Icon(Icons.person),
-        hintText: hintText,
         labelText: fieldName,
       ),
       validator: (value) {
         if (value.isEmpty) {
-          return 'Cannot be blank';
+          return T.textFieldValidationEmpty;
         }
         return null;
       },
@@ -69,23 +69,23 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
   }
 
   Future<void> _doSignin(BuildContext context) async {
+    final T = S.of(context);
     final provider = context.read<AccountProvider>();
 
     final user = Player(
-        playerName: getFieldValue(_formFieldPlayerName),
-        islandName: getFieldValue(_formFieldIslandName),
-        pinCode: getFieldValue(_formFieldPinCode)?.toUpperCase());
+        playerName: getFieldValue(T.playerName),
+        islandName: getFieldValue(T.islandName),
+        pinCode: getFieldValue(T.loginPagePinCode)?.toUpperCase());
 
-    //TODO: Use error alert
     try {
       await provider.signin(user);
     } on SigninError catch (err) {
-      debugPrint('Sign in error ${err.message}');
-      await showAlertMessage(context, 'Signin fail', err.message);
+      debugPrint('Login error ${err.message}');
+      await showAlertMessage(context, T.loginPageLoginErrorTitle, err.message);
     } on Exception catch (err) {
-      debugPrint('Sign in with exception ${err.toString()}');
+      debugPrint('Login with exception ${err.toString()}');
       await showAlertMessage(
-          context, 'Signin fail', 'Signin fail, please try again later');
+          context, 'Login fail', 'Signin fail, please try again later');
     }
   }
 
@@ -99,19 +99,20 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
 
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     return Form(
       key: _formKey,
       child: ListView(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         children: <Widget>[
-          _buildFormField(_formFieldPlayerName, 'What is your name'),
+          _buildFormField(context, T.playerName),
           SizedBox(height: 24),
-          _buildFormField(_formFieldIslandName, 'What is your island name'),
+          _buildFormField(context, T.islandName),
           SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Text('Existing user?'),
+              Text(T.loginPageExistingUser),
               Switch(
                   value: _isExistingUser,
                   onChanged: (isOn) {
@@ -122,13 +123,10 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
             ],
           ),
           if (_isExistingUser)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildFormField(
-                _formFieldPinCode,
-                'Pin code for previous account',
-              ),
-            ),
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              Flexible(child: _buildFormField(context, T.loginPagePinCode)),
+              HelpIconButton(alertMessage: T.loginPagePinCodeHelpMessage)
+            ]),
           RaisedButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
@@ -136,7 +134,7 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
               }
             },
             child: Text(
-              'Submit',
+              T.loginPageLogin,
               style: TextStyle(color: Colors.white),
             ),
           ),

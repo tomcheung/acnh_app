@@ -7,6 +7,7 @@ import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/card.dart';
 import '../../core/model/turnip_price.dart';
 import '../../core/provider/account_provider.dart';
+import '../../generated/l10n.dart';
 import '../profile/price_item.dart';
 import 'add_friend_dialog.dart';
 import 'friend_price.dart';
@@ -85,13 +86,14 @@ class _FriendPageState extends State<FriendPage> {
 
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     return ChangeNotifierProvider(
       create: (context) {
         final accountProvider = context.read<AccountProvider>();
         return FriendProvider(accountProvider)..subscribeFriendPrice();
       },
       child: AcnhPage(
-        title: 'Friends',
+        title: T.pageFriends,
         actions: [
           IconButton(
             icon: Icon(_isEdit ? Icons.done : Icons.edit),

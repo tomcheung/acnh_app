@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../generated/l10n.dart';
 import 'profile_view.dart';
 
 class _NavigateDrawerItem extends StatelessWidget {
@@ -25,12 +26,13 @@ class _AcnhDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     return Drawer(
       child: ListView(children: <Widget>[
         ProfileView(),
-        _NavigateDrawerItem('Home', '/'),
-        _NavigateDrawerItem('Friends', '/friend'),
-        _NavigateDrawerItem('Profile', '/profile'),
+        _NavigateDrawerItem(T.pageTurnip, '/'),
+        _NavigateDrawerItem(T.pageFriends, '/friend'),
+        _NavigateDrawerItem(T.pageProfile, '/profile'),
       ]),
     );
   }

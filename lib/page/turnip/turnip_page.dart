@@ -1,3 +1,4 @@
+import 'package:acnhpal/generated/l10n.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:intl/date_symbols.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,7 @@ class _PurchasePriceRow extends StatelessWidget {
     final theme = Theme.of(context);
     return Row(mainAxisSize: MainAxisSize.max, children: [
       Text(
-        'Purchase Price',
+        S.of(context).turnipPurchasePrice,
         style: theme.primaryTextTheme.subtitle2,
       ),
       Expanded(
@@ -149,10 +150,10 @@ class _TurnipInputForm extends StatelessWidget {
 }
 
 class TurnipHomePage extends StatelessWidget {
-  static const String title = 'Home';
-
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
+
     return Provider<TurnipProvider>(
       create: (context) {
         final accountProvider = context.read<AccountProvider>();
@@ -160,7 +161,7 @@ class TurnipHomePage extends StatelessWidget {
       },
       dispose: (context, provider) => provider.dispose(),
       child: AcnhPage(
-        title: title,
+        title: T.pageTurnip,
         child: Container(
           padding: EdgeInsets.all(12),
           alignment: Alignment.topCenter,

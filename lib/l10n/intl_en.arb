@@ -1,0 +1,17 @@
+{
+  "playerName": "Player Name",
+  "islandName": "Island Name",
+  "textFieldValidationEmpty": "Cannot be blank",
+  "pageTurnip": "Turnip",
+  "pageFriends": "Friends",
+  "pageProfile": "Profile",
+  "loginPageTitle": "Welcome",
+  "loginPageExistingUser": "Existing user?",
+  "loginPagePinCode": "Pin code for previous account",
+  "loginPagePinCodeHelpMessage": "Pin code is 6 character code to identify your account, you can find this code in profile page from logged in device",
+  "loginPageLogin": "Login",
+  "loginPageLoginErrorTitle": "Login fail",
+  "turnipPurchasePrice": "Purchase Price",
+  "profilePinCodeDescription": "Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app",
+  "profileLogout": "Logout"
+}

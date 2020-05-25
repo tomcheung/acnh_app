@@ -3,10 +3,12 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'core/firebase_service.dart';
 import 'core/provider/account_provider.dart';
+import 'generated/l10n.dart';
 import 'page/friend/friend_page.dart';
 import 'page/login/login_page.dart';
 import 'page/profile/profile_page.dart';
@@ -40,6 +42,13 @@ class AcnhApp extends StatelessWidget {
     return MultiProvider(
       providers: [ChangeNotifierProvider.value(value: AccountProvider())],
       child: MaterialApp(
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         title: 'Animal crossing',
         theme: ThemeData(
           cardTheme: CardTheme(
