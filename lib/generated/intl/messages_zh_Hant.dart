@@ -35,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileLogout" : MessageLookupByLibrary.simpleMessage("登出"),
     "profilePinCodeDescription" : MessageLookupByLibrary.simpleMessage("Pin code 是一個獨特編號，你需要在其他裝置登入或重娤此App的時候輪入此編號"),
     "textFieldValidationEmpty" : MessageLookupByLibrary.simpleMessage("請輸入內容"),
-    "turnipPurchasePrice" : MessageLookupByLibrary.simpleMessage("賺入價")
+    "turnipPredictPageTitle" : MessageLookupByLibrary.simpleMessage("菜價估算"),
+    "turnipPredictPrice" : MessageLookupByLibrary.simpleMessage("預測菜價"),
+    "turnipPurchasePrice" : MessageLookupByLibrary.simpleMessage("購入價")
   };
 }

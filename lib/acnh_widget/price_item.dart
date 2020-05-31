@@ -3,35 +3,37 @@ import 'package:flutter/material.dart';
 class PriceItem extends StatelessWidget {
   static const double _iconSize = 20;
   final String weekday;
-  final int morningValue;
-  final int afternoonValue;
+  final String morningValue;
+  final String afternoonValue;
+  final MaterialColor color;
 
-  PriceItem({
+  const PriceItem({
     @required this.weekday,
     @required this.morningValue,
     @required this.afternoonValue,
+    this.color
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.amber, borderRadius: BorderRadius.circular(8)),
-      padding: EdgeInsets.all(6),
-      margin: EdgeInsets.all(4),
+          color: color ?? Colors.amber, borderRadius: BorderRadius.circular(8)),
+      padding: const EdgeInsets.all(6),
+      margin: const EdgeInsets.all(4),
       child: Column(
         children: [
           Text(weekday),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.brightness_7,
                 size: _iconSize,
               ),
               ConstrainedBox(
-                constraints: BoxConstraints(minWidth: 30),
+                constraints: const BoxConstraints(minWidth: 30),
                 child: Text(
-                  morningValue.toString(),
+                  morningValue,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -40,14 +42,14 @@ class PriceItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.brightness_3,
                 size: _iconSize,
               ),
               ConstrainedBox(
-                constraints: BoxConstraints(minWidth: 30),
+                constraints: const BoxConstraints(minWidth: 30),
                 child: Text(
-                  afternoonValue.toString(),
+                  afternoonValue,
                   textAlign: TextAlign.center,
                 ),
               )

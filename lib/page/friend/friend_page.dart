@@ -1,14 +1,14 @@
+import 'package:acnhpal/core/util/date.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide Card;
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/card.dart';
+import '../../acnh_widget/price_item.dart';
 import '../../core/model/turnip_price.dart';
 import '../../core/provider/account_provider.dart';
 import '../../generated/l10n.dart';
-import '../profile/price_item.dart';
 import 'add_friend_dialog.dart';
 import 'friend_price.dart';
 import 'friend_provider.dart';
@@ -19,12 +19,7 @@ class FriendPage extends StatefulWidget {
 }
 
 class _FriendPageState extends State<FriendPage> {
-  static final _weekDay = DateFormat.s()
-      .dateSymbols
-      .SHORTWEEKDAYS
-      .sublist(1)
-      .map((w) => w.toUpperCase())
-      .toList(growable: false);
+  static final _weekDay = weekDayString;
 
   bool _isEdit = false;
 
@@ -45,8 +40,8 @@ class _FriendPageState extends State<FriendPage> {
       row.add(
         PriceItem(
             weekday: _weekDay[i ~/ 2],
-            morningValue: dailyPrice[i],
-            afternoonValue: dailyPrice[i + 1]),
+            morningValue: dailyPrice[i].toString(),
+            afternoonValue: dailyPrice[i + 1].toString()),
       );
     }
 

@@ -1,4 +1,5 @@
 {
+  "@@locale": "zh_Hant",
   "playerName": "玩家名稱",
   "islandName": "島名",
   "textFieldValidationEmpty": "請輸入內容",
@@ -11,7 +12,9 @@
   "loginPagePinCodeHelpMessage": "Pin code 是一個六位數字的編號，用來連結你的帳戶，你可以在己登入的裝置上的個人頁面找到",
   "loginPageLogin": "登入",
   "loginPageLoginErrorTitle": "登入失敗",
-  "turnipPurchasePrice": "賺入價",
+  "turnipPurchasePrice": "購入價",
+  "turnipPredictPrice": "預測菜價",
+  "turnipPredictPageTitle": "菜價估算",
   "profilePinCodeDescription": "Pin code 是一個獨特編號，你需要在其他裝置登入或重娤此App的時候輪入此編號",
   "profileLogout": "登出"
 }

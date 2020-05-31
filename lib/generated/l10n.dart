@@ -144,6 +144,24 @@ class S {
     );
   }
 
+  String get turnipPredictPrice {
+    return Intl.message(
+      'Predict Price',
+      name: 'turnipPredictPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get turnipPredictPageTitle {
+    return Intl.message(
+      'Turnip Price Prediction',
+      name: 'turnipPredictPageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get profilePinCodeDescription {
     return Intl.message(
       'Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app',

@@ -12,6 +12,7 @@ class TurnipProvider {
   StreamSubscription _sub;
 
   Stream<TurnipPrice> get turnipPriceSteam => _priceSteamController.stream;
+  TurnipPrice get lastPrice => _lastData;
 
   TurnipProvider(AccountProvider accountProvider)
       : _priceSteamController = StreamController<TurnipPrice>.broadcast(),

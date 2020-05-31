@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:acnhpal/page/turnip/prediction/turnip_prediction_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,7 @@ import 'generated/l10n.dart';
 import 'page/friend/friend_page.dart';
 import 'page/login/login_page.dart';
 import 'page/profile/profile_page.dart';
+import 'page/turnip/prediction/turnip_prediction_page.dart';
 import 'page/turnip/turnip_page.dart';
 
 Future<void> main() async {
@@ -50,6 +52,7 @@ class AcnhApp extends StatelessWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         title: 'Animal crossing',
+        // TODO: Move theme to separate file
         theme: ThemeData(
           cardTheme: CardTheme(
             shape: RoundedRectangleBorder(
@@ -86,6 +89,7 @@ class AcnhApp extends StatelessWidget {
           '/': (context) => RootPage(),
           '/profile': (context) => ProfilePage(),
           '/friend': (context) => FriendPage(),
+          '/turnip/prediction': (context) => TurnipPredictionPage()
         },
       ),
     );

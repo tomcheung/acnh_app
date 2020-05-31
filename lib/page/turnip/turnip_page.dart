@@ -1,5 +1,7 @@
 import 'package:acnhpal/generated/l10n.dart';
+import 'package:acnhpal/page/turnip/prediction/turnip_prediction_page.dart';
 import 'package:flutter/material.dart' hide TextField;
+import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbols.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -150,8 +152,17 @@ class _TurnipInputForm extends StatelessWidget {
 }
 
 class TurnipHomePage extends StatelessWidget {
+  _toPricePredictPage(BuildContext context, TurnipProvider provider) {
+    Navigator.pushNamed(
+      context,
+      '/turnip/prediction',
+      arguments: TurnipPredictionArguments(provider.lastPrice),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final T = S.of(context);
 
     return Provider<TurnipProvider>(
@@ -167,7 +178,26 @@ class TurnipHomePage extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
-            child: _TurnipInputForm(),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: _TurnipInputForm()),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Consumer<TurnipProvider>(
+                        builder: (context, turnipProvider, child) =>
+                            RaisedButton(
+                              color: theme.primaryColor,
+                              onPressed: () {
+                                _toPricePredictPage(context, turnipProvider);
+                              },
+                              child: Text(
+                                T.turnipPredictPrice,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )),
+                  )
+                ]),
           ),
         ),
       ),
