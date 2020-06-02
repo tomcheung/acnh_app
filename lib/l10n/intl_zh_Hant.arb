@@ -22,5 +22,9 @@
   "clearDataAlerTitleMessage": "資料一但清除，將無法還原",
   "cancel": "取消",
   "delete": "清除",
-  "processing": "處理中"
+  "processing": "處理中",
+  "fluctuating": "波型",
+  "smallSpike": "4期型",
+  "largeSpike": "3期型",
+  "decreasing": "遞減型"
 }

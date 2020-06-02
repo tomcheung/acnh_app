@@ -22,5 +22,9 @@
   "clearDataAlerTitleMessage": "This action cannot be recovered, are you sure for that?",
   "cancel": "Cancel",
   "delete": "Delete",
-  "processing": "Processing"
+  "processing": "Processing",
+  "fluctuating": "Fluctuating",
+  "smallSpike": "Small Spike",
+  "largeSpike": "Large Spike",
+  "decreasing": "Decreasing"
 }

@@ -2,6 +2,7 @@
 // https://github.com/elxris/Turnip-Calculator/blob/4bc81748eaacaffb94f354ecf2062ac532e6758b/wasm/src/patterns.rs
 
 import 'dart:math';
+import 'package:acnhpal/core/model/turnip_price_prediction.dart';
 import 'package:equatable/equatable.dart';
 
 import 'model/pair.dart';
@@ -101,9 +102,9 @@ _randFloatRelative(
 }
 
 // PATTERN 0: high, decreasing, high, decreasing, high
-List<Pair<List<MinMax<int>>, int>> _pattern0(
+List<Pair<List<MinMax<int>>, TurnipPricePattern>> _pattern0(
     MinMax<int> basePrice, List<int> filters) {
-  final probabilties = <Pair<List<MinMax<int>>, int>>[];
+  final probabilties = <Pair<List<MinMax<int>>, TurnipPricePattern>>[];
   final current = <MinMaxPoint>[];
 
   for (var decPhaseLen1 in [2, 3]) {
@@ -162,7 +163,8 @@ List<Pair<List<MinMax<int>>, int>> _pattern0(
         }
 
         probabilties.add(
-          Pair(current.map((e) => e.toMinMax()).toList(growable: false), 0),
+          Pair(current.map((e) => e.toMinMax()).toList(growable: false),
+              TurnipPricePattern.fluctuating),
         );
 
         current.clear();
@@ -174,9 +176,9 @@ List<Pair<List<MinMax<int>>, int>> _pattern0(
 }
 
 // PATTERN 1: decreasing middle, high spike, random low
-List<Pair<List<MinMax<int>>, int>> _pattern1(
+List<Pair<List<MinMax<int>>, TurnipPricePattern>> _pattern1(
     MinMax<int> basePrice, List<int> filters) {
-  final probabilties = <Pair<List<MinMax<int>>, int>>[];
+  final probabilties = <Pair<List<MinMax<int>>, TurnipPricePattern>>[];
   final current = <MinMaxPoint>[];
 
   for (var peakStart = 3; peakStart <= 9; peakStart++) {
@@ -207,7 +209,8 @@ List<Pair<List<MinMax<int>>, int>> _pattern1(
     }
 
     probabilties.add(
-      Pair(current.map((e) => e.toMinMax()).toList(growable: false), 1),
+      Pair(current.map((e) => e.toMinMax()).toList(growable: false),
+          TurnipPricePattern.largeSpike),
     );
 
     current.clear();
@@ -217,9 +220,9 @@ List<Pair<List<MinMax<int>>, int>> _pattern1(
 }
 
 // PATTERN 2: consistently decreasing
-List<Pair<List<MinMax<int>>, int>> _pattern2(
+List<Pair<List<MinMax<int>>, TurnipPricePattern>> _pattern2(
     MinMax<int> basePrice, List<int> filters) {
-  final probabilties = <Pair<List<MinMax<int>>, int>>[];
+  final probabilties = <Pair<List<MinMax<int>>, TurnipPricePattern>>[];
   final current = <MinMaxPoint>[];
 
   var work = 2;
@@ -237,16 +240,17 @@ List<Pair<List<MinMax<int>>, int>> _pattern2(
   }
 
   probabilties.add(
-    Pair(current.map((e) => e.toMinMax()).toList(growable: false), 2),
+    Pair(current.map((e) => e.toMinMax()).toList(growable: false),
+        TurnipPricePattern.decreasing),
   );
 
   return probabilties;
 }
 
 // PATTERN 3: decreasing, spike, decreasing
-List<Pair<List<MinMax<int>>, int>> _pattern3(
+List<Pair<List<MinMax<int>>, TurnipPricePattern>> _pattern3(
     MinMax<int> basePrice, List<int> filters) {
-  final probabilities = <Pair<List<MinMax<int>>, int>>[];
+  final probabilities = <Pair<List<MinMax<int>>, TurnipPricePattern>>[];
   final current = <MinMaxPoint>[];
 
   for (var peakStart = 2; peakStart <= 9; peakStart++) {
@@ -310,7 +314,8 @@ List<Pair<List<MinMax<int>>, int>> _pattern3(
     }
 
     probabilities.add(
-      Pair(current.map((e) => e.toMinMax()).toList(growable: false), 3),
+      Pair(current.map((e) => e.toMinMax()).toList(growable: false),
+          TurnipPricePattern.smallSpike),
     );
     current.clear();
   }
@@ -318,13 +323,13 @@ List<Pair<List<MinMax<int>>, int>> _pattern3(
   return probabilities;
 }
 
-List<Pair<List<MinMax<int>>, int>> calculate(List<int> filters) {
+List<Pair<List<MinMax<int>>, TurnipPricePattern>> calculate(List<int> filters) {
   final filtersPadded = List.generate(
       13, (i) => i < filters.length && filters[i] > 0 ? filters[i] : null);
   final minPrice = filtersPadded[0] ?? 90;
   final maxPrice = filtersPadded[0] ?? 110;
 
-  final results = <Pair<List<MinMax<int>>, int>>[];
+  final results = <Pair<List<MinMax<int>>, TurnipPricePattern>>[];
 
   final basePrice = MinMax(
     max(min(minPrice, maxPrice), 90),

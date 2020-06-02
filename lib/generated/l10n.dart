@@ -233,6 +233,42 @@ class S {
       args: [],
     );
   }
+
+  String get fluctuating {
+    return Intl.message(
+      'Fluctuating',
+      name: 'fluctuating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get smallSpike {
+    return Intl.message(
+      'Small Spike',
+      name: 'smallSpike',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get largeSpike {
+    return Intl.message(
+      'Large Spike',
+      name: 'largeSpike',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get decreasing {
+    return Intl.message(
+      'Decreasing',
+      name: 'decreasing',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

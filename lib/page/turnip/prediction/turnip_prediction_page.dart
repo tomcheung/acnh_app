@@ -1,6 +1,8 @@
 import 'dart:math';
 
-import 'package:acnhpal/core/util/date.dart';
+import 'package:acnhpal/core/model/turnip_price_prediction.dart';
+
+import '../../../core/util/date.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -176,7 +178,7 @@ class TurnipPredictionPage extends StatelessWidget {
 class _TurnipPredictionTable extends StatelessWidget {
   String mapMinMaxLabel(MinMax minMax) => '${minMax.min} - ${minMax.max}';
 
-  Widget _buildTableRow(TurnipPrediction prediction) {
+  Widget _buildTableRow(TurnipPrediction prediction, BuildContext context) {
     final items = Iterable.generate(weekDayString.length).map(
       (weekDayIndex) {
         final patterns = prediction.pattern;
@@ -190,7 +192,7 @@ class _TurnipPredictionTable extends StatelessWidget {
 
     return Table(children: [
       TableRow(children: [
-        Text('Type: ${prediction.type}'),
+        Text(prediction.type.localizedDescription(context)),
         const SizedBox(),
         const SizedBox()
       ]),
@@ -202,7 +204,7 @@ class _TurnipPredictionTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TurnipPredictionProvider>();
-    final items = provider.patterns.map(_buildTableRow).toList(growable: false);
+    final items = provider.patterns.map((p) => _buildTableRow(p, context)).toList(growable: false);
     return ListView(
       children: items,
       cacheExtent: 100,

@@ -1,12 +1,14 @@
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
-import '../../../core/model/turnip_price.dart';
-import '../../../core/price_prediction.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../../core/model/turnip_price.dart';
+import '../../../core/model/turnip_price_prediction.dart';
+import '../../../core/price_prediction.dart';
 
 class TurnipPrediction {
-  final int type;
+  final TurnipPricePattern type;
   final List<MinMax<int>> pattern;
   double probability;
 
@@ -24,7 +26,12 @@ class TurnipPredictionProvider extends ChangeNotifier {
 
   void computePrice(TurnipPrice price) {
     currentPrice = price;
-    const probabilitiesPerPattern = [140, 105, 55, 100];
+    const probabilitiesPerPattern = {
+      TurnipPricePattern.fluctuating: 140,
+      TurnipPricePattern.largeSpike: 105,
+      TurnipPricePattern.decreasing: 55,
+      TurnipPricePattern.smallSpike: 100
+    };
 
     final priceFilters = [price.purchasePrice, ...price.dailyPrice];
     var patterns = calculate(priceFilters)
@@ -33,11 +40,13 @@ class TurnipPredictionProvider extends ChangeNotifier {
 
     patterns = _heuristicFilter(price, patterns);
 
-    final countPreType = patterns.fold<Map<int, int>>({0: 0, 1: 0, 2: 0, 3: 0},
-        (result, pattern) {
-      result[pattern.type] += 1;
-      return result;
-    });
+    final countPreType = patterns.fold<Map<TurnipPricePattern, int>>(
+      Map.fromIterable(TurnipPricePattern.values, value: (_) => 0),
+      (result, pattern) {
+        result[pattern.type] += 1;
+        return result;
+      },
+    );
 
     final allPatternProb = countPreType.entries.fold(
         0, (result, e) => result + probabilitiesPerPattern[e.key] * e.value);
