@@ -1,5 +1,5 @@
 import 'package:acnhpal/core/util/date.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:acnhpal/page/turnip/prediction/turnip_prediction_page.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:provider/provider.dart';
 
@@ -13,24 +13,15 @@ import 'add_friend_dialog.dart';
 import 'friend_price.dart';
 import 'friend_provider.dart';
 
-class FriendPage extends StatefulWidget {
-  @override
-  _FriendPageState createState() => _FriendPageState();
-}
+class _FriendItem extends StatelessWidget {
+  final FriendPrice friendPrice;
+  final bool isEdit;
 
-class _FriendPageState extends State<FriendPage> {
-  static final _weekDay = weekDayString;
+  _FriendItem(this.friendPrice, {this.isEdit = false});
 
-  bool _isEdit = false;
-
-  void _showEditAlert(BuildContext context, FriendProvider friendProvider) {
-    showDialog(context: context, child: AddFriendDialog(friendProvider));
-  }
-
-  void _toggleEditMode() {
-    setState(() {
-      _isEdit = !_isEdit;
-    });
+  _openPredictionPage(BuildContext context) {
+    Navigator.of(context).pushNamed('/turnip/prediction',
+        arguments: TurnipPredictionArguments(friendPrice.price));
   }
 
   Widget _buildPrice(BuildContext context, TurnipPrice price) {
@@ -39,19 +30,25 @@ class _FriendPageState extends State<FriendPage> {
     for (var i = 0; i < dailyPrice.length; i += 2) {
       row.add(
         PriceItem(
-            weekday: _weekDay[i ~/ 2],
-            morningValue: dailyPrice[i].toString(),
-            afternoonValue: dailyPrice[i + 1].toString()),
+          weekday: weekDayString[i ~/ 2],
+          morningValue: dailyPrice[i].toString(),
+          afternoonValue: dailyPrice[i + 1].toString(),
+        ),
       );
     }
 
-    return Wrap(
-      direction: Axis.horizontal,
-      children: row,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _openPredictionPage(context),
+      child: Wrap(
+        direction: Axis.horizontal,
+        children: row,
+      ),
     );
   }
 
-  Widget _buildFriendPriceItem(BuildContext context, FriendPrice friendPrice) {
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Card(
@@ -63,7 +60,7 @@ class _FriendPageState extends State<FriendPage> {
           ),
           SizedBox(height: 8),
           Text(friendPrice.friend.playerName),
-          if (_isEdit)
+          if (isEdit)
             IconButton(
               icon: Icon(Icons.delete, color: Colors.redAccent),
               onPressed: () {
@@ -76,6 +73,25 @@ class _FriendPageState extends State<FriendPage> {
       content: <Widget>[_buildPrice(context, friendPrice.price)],
       color: theme.cardColor,
     );
+  }
+}
+
+class FriendPage extends StatefulWidget {
+  @override
+  _FriendPageState createState() => _FriendPageState();
+}
+
+class _FriendPageState extends State<FriendPage> {
+  bool _isEdit = false;
+
+  void _showEditAlert(BuildContext context, FriendProvider friendProvider) {
+    showDialog(context: context, child: AddFriendDialog(friendProvider));
+  }
+
+  void _toggleEditMode() {
+    setState(() {
+      _isEdit = !_isEdit;
+    });
   }
 
   @override
@@ -109,7 +125,7 @@ class _FriendPageState extends State<FriendPage> {
                 },
                 child: ListView(
                   children: snapshot.data
-                      .map((d) => _buildFriendPriceItem(context, d))
+                      .map((d) => _FriendItem(d, isEdit: _isEdit))
                       .toList(),
                 ),
               );
