@@ -151,18 +151,85 @@ class _TurnipInputForm extends StatelessWidget {
   }
 }
 
-class TurnipHomePage extends StatelessWidget {
-  _toPricePredictPage(BuildContext context, TurnipProvider provider) {
+class _TurnipActions extends StatelessWidget {
+  _toPricePredictPage(BuildContext context) {
+    final turnipProvider = context.read<TurnipProvider>();
     Navigator.pushNamed(
       context,
       '/turnip/prediction',
-      arguments: TurnipPredictionArguments(provider.lastPrice),
+      arguments: TurnipPredictionArguments(turnipProvider.lastPrice),
+    );
+  }
+
+  void _showClearDataAlert(BuildContext context) {
+    final turnipProvider = context.read<TurnipProvider>();
+    final T = S.of(context);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(T.cleardataalerTitle),
+        content: Text(T.clearDataAlerTitleMessage),
+        actions: [
+          FlatButton(
+            child: Text(T.cancel),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
+            child: Text(T.delete, style: TextStyle(color: Colors.red)),
+            onPressed: () async {
+              await turnipProvider.clearData();
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final T = S.of(context);
     final theme = Theme.of(context);
+    const textStyle = TextStyle(color: Colors.white);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: _TurnipInputForm()),
+          RaisedButton(
+            color: Colors.red,
+            onPressed: () {
+              _showClearDataAlert(context);
+            },
+            child: Text(
+              S.of(context).clearAllData,
+              style: textStyle,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 48,
+            child: RaisedButton(
+              color: theme.primaryColor,
+              onPressed: () {
+                _toPricePredictPage(context);
+              },
+              child: Text(
+                T.turnipPredictPrice,
+                style: textStyle,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TurnipHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final T = S.of(context);
 
     return Provider<TurnipProvider>(
@@ -174,30 +241,13 @@ class TurnipHomePage extends StatelessWidget {
       child: AcnhPage(
         title: T.pageTurnip,
         child: Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(child: _TurnipInputForm()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Consumer<TurnipProvider>(
-                        builder: (context, turnipProvider, child) =>
-                            RaisedButton(
-                              color: theme.primaryColor,
-                              onPressed: () {
-                                _toPricePredictPage(context, turnipProvider);
-                              },
-                              child: Text(
-                                T.turnipPredictPrice,
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            )),
-                  )
-                ]),
+            child: Consumer<TurnipProvider>(
+              builder: (context, turnipProvider, child) => _TurnipActions(),
+            ),
           ),
         ),
       ),

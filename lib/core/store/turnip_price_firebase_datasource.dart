@@ -4,7 +4,7 @@ import '../model/turnip_price.dart';
 abstract class TurnipPriceDataSource {
   Stream<TurnipPrice> subscribePrice();
 
-  void updatePrice(TurnipPrice newPrice);
+  Future<void> updatePrice(TurnipPrice newPrice);
 }
 
 class TurnipPriceFirebaseDataSource implements TurnipPriceDataSource {
@@ -30,7 +30,7 @@ class TurnipPriceFirebaseDataSource implements TurnipPriceDataSource {
     });
   }
 
-  void updatePrice(TurnipPrice newPrice) async {
+  Future<void> updatePrice(TurnipPrice newPrice) async {
     var priceRef = db.reference().child('usersInfo/$userId');
     var newValue = [newPrice.purchasePrice, ...newPrice.dailyPrice];
     try {

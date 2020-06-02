@@ -12,6 +12,7 @@ class TurnipProvider {
   StreamSubscription _sub;
 
   Stream<TurnipPrice> get turnipPriceSteam => _priceSteamController.stream;
+
   TurnipPrice get lastPrice => _lastData;
 
   TurnipProvider(AccountProvider accountProvider)
@@ -38,6 +39,10 @@ class TurnipProvider {
     var newPrice = TurnipPrice.clone(_lastData);
     newPrice.purchasePrice = price;
     _dataSource.updatePrice(newPrice);
+  }
+
+  void clearData() async {
+    await _dataSource.updatePrice(TurnipPrice.empty());
   }
 
   void dispose() {

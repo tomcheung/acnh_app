@@ -21,6 +21,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
+    "clearAllData" : MessageLookupByLibrary.simpleMessage("Clear all data"),
+    "clearDataAlerTitleMessage" : MessageLookupByLibrary.simpleMessage("This action cannot be recovered, are you sure for that?"),
+    "cleardataalerTitle" : MessageLookupByLibrary.simpleMessage("Delete all data?"),
+    "delete" : MessageLookupByLibrary.simpleMessage("Delete"),
     "islandName" : MessageLookupByLibrary.simpleMessage("Island Name"),
     "loginPageExistingUser" : MessageLookupByLibrary.simpleMessage("Existing user?"),
     "loginPageLogin" : MessageLookupByLibrary.simpleMessage("Login"),

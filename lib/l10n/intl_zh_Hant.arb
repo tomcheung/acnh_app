@@ -16,5 +16,10 @@
   "turnipPredictPrice": "預測菜價",
   "turnipPredictPageTitle": "菜價估算",
   "profilePinCodeDescription": "Pin code 是一個獨特編號，你需要在其他裝置登入或重娤此App的時候輪入此編號",
-  "profileLogout": "登出"
+  "profileLogout": "登出",
+  "clearAllData": "清除所有資料",
+  "cleardataalerTitle": "確定清除所有資料?",
+  "clearDataAlerTitleMessage": "資料一但清除，將無法還原",
+  "cancel": "取消",
+  "delete": "清除"
 }

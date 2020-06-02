@@ -63,18 +63,17 @@ class _FriendPageState extends State<FriendPage> {
           ),
           SizedBox(height: 8),
           Text(friendPrice.friend.playerName),
-          if (_isEdit) IconButton(
-            icon: Icon(Icons.delete, color: Colors.redAccent),
-            onPressed: () {
-              var provider = context.read<FriendProvider>();
-              provider.removeFriend(friendPrice.friend);
-            },
-          )
+          if (_isEdit)
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.redAccent),
+              onPressed: () {
+                var provider = context.read<FriendProvider>();
+                provider.removeFriend(friendPrice.friend);
+              },
+            )
         ],
       ),
-      content: <Widget>[
-        _buildPrice(context, friendPrice.price)
-      ],
+      content: <Widget>[_buildPrice(context, friendPrice.price)],
       color: theme.cardColor,
     );
   }

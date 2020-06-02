@@ -179,6 +179,51 @@ class S {
       args: [],
     );
   }
+
+  String get clearAllData {
+    return Intl.message(
+      'Clear all data',
+      name: 'clearAllData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get cleardataalerTitle {
+    return Intl.message(
+      'Delete all data?',
+      name: 'cleardataalerTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get clearDataAlerTitleMessage {
+    return Intl.message(
+      'This action cannot be recovered, are you sure for that?',
+      name: 'clearDataAlerTitleMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

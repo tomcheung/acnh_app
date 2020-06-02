@@ -21,6 +21,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "cancel" : MessageLookupByLibrary.simpleMessage("取消"),
+    "clearAllData" : MessageLookupByLibrary.simpleMessage("清除所有資料"),
+    "clearDataAlerTitleMessage" : MessageLookupByLibrary.simpleMessage("資料一但清除，將無法還原"),
+    "cleardataalerTitle" : MessageLookupByLibrary.simpleMessage("確定清除所有資料?"),
+    "delete" : MessageLookupByLibrary.simpleMessage("清除"),
     "islandName" : MessageLookupByLibrary.simpleMessage("島名"),
     "loginPageExistingUser" : MessageLookupByLibrary.simpleMessage("舊用家?"),
     "loginPageLogin" : MessageLookupByLibrary.simpleMessage("登入"),

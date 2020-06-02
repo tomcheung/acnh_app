@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "playerName": "Player Name",
   "islandName": "Island Name",
   "textFieldValidationEmpty": "Cannot be blank",
@@ -15,5 +16,10 @@
   "turnipPredictPrice": "Predict Price",
   "turnipPredictPageTitle": "Turnip Price Prediction",
   "profilePinCodeDescription": "Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app",
-  "profileLogout": "Logout"
+  "profileLogout": "Logout",
+  "clearAllData": "Clear all data",
+  "cleardataalerTitle": "Delete all data?",
+  "clearDataAlerTitleMessage": "This action cannot be recovered, are you sure for that?",
+  "cancel": "Cancel",
+  "delete": "Delete"
 }
