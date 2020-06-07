@@ -13,6 +13,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
     pinCode: json['pinCode'] as String,
     fbToken: json['fbToken'] as String,
     userId: json['userId'] as String,
+    friendCode: json['friendCode'] as String,
   );
 }
 
@@ -30,5 +31,6 @@ Map<String, dynamic> _$PlayerToJson(Player instance) {
   writeNotNull('pinCode', instance.pinCode);
   writeNotNull('fbToken', instance.fbToken);
   writeNotNull('userId', instance.userId);
+  writeNotNull('friendCode', instance.friendCode);
   return val;
 }

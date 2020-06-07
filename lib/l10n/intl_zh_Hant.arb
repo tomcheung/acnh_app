@@ -21,5 +21,6 @@
   "cleardataalerTitle": "確定清除所有資料?",
   "clearDataAlerTitleMessage": "資料一但清除，將無法還原",
   "cancel": "取消",
-  "delete": "清除"
+  "delete": "清除",
+  "processing": "處理中"
 }

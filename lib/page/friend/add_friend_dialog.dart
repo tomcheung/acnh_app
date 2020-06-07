@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../acnh_widget/alert.dart';
+import '../../acnh_widget/raised_button_with_loading.dart';
 import '../../core/api/error.dart';
-import '../../core/model/friend.dart';
+import '../../core/config.dart';
 import 'friend_provider.dart';
 
 class AddFriendDialog extends StatefulWidget {
@@ -15,12 +17,18 @@ class AddFriendDialog extends StatefulWidget {
 }
 
 class _AddFriendDialogState extends State<AddFriendDialog> {
-  final _friendNameController = TextEditingController();
-  final _friendIslandNameController = TextEditingController();
-  final _friendPinCodeController = TextEditingController();
+  final _friendCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  bool _loading = false;
+  @override
+  void initState() {
+    super.initState();
+    Clipboard.getData('text/plain').then((clipboardData) {
+      if (clipboardData.text?.startsWith(env.friendCodePrefix) ?? false) {
+        _friendCodeController.text = clipboardData.text;
+      }
+    });
+  }
 
   String _validator(String input) {
     if (input.isEmpty) {
@@ -29,39 +37,27 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
     return null;
   }
 
-  void _submitForm(BuildContext context) {
+  Future<void> _submitForm(BuildContext context) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
 
-    final friend = Friend(
-      playerName: _friendNameController.text,
-      islandName: _friendIslandNameController.text,
-      pinCode: _friendPinCodeController.text.toUpperCase(),
-    );
+    final friendId =
+        _friendCodeController.text.replaceFirst(env.friendCodePrefix, '');
 
-    setState(() {
-      _loading = true;
-    });
-
-    widget.friendProvider
-        .addFriend(friend)
-        .then((value) => Navigator.pop(context), onError: (error) {
-      if (error is ApiError) {
-        showAlertMessage(context, 'Cannot add friend', error.error);
-      } else {
-        showAlertMessage(context, 'Cannot add friend', 'Unexpected error');
-      }
-    }).whenComplete(() {
-      setState(() {
-        _loading = false;
-      });
-    });
+    try {
+      await widget.friendProvider.addFriend(friendId);
+    } on ApiError catch (error) {
+      showAlertMessage(context, 'Cannot add friend', error.error);
+      print('addfrend error: $error}');
+    } catch (error) {
+      showAlertMessage(context, 'Cannot add friend', 'Unexpected error');
+      print('addfrend error: $error}');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build alert');
     final theme = Theme.of(context);
     return Dialog(
       shape: theme.cardTheme.shape,
@@ -84,57 +80,26 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
                 ),
               ),
               TextFormField(
-                controller: _friendNameController,
+                controller: _friendCodeController,
+                style: TextStyle(fontSize: 12),
                 decoration: InputDecoration(
                   icon: Icon(Icons.person),
-                  labelText: 'Friend Name',
-                ),
-                validator: _validator,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _friendIslandNameController,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.person),
-                  labelText: 'Friend Island Name',
-                ),
-                validator: _validator,
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                controller: _friendPinCodeController,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.lock_open),
-                  labelText: 'Friend Pin Code',
+                  labelText: 'Friend code',
                 ),
                 validator: _validator,
               ),
               SizedBox(height: 24),
               Align(
                 alignment: Alignment.centerRight,
-                child: _loading
-                    ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            child: CircularProgressIndicator(strokeWidth: 2,),
-                            height: 18,
-                            width: 18,
-                          ),
-                          SizedBox(width: 8),
-                          Text('Loading...'),
-                        ],
-                      ),
-                    )
-                    : RaisedButton(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () => _submitForm(context),
-                      ),
+                child: RaisedButtonWithLoading(
+                  childBuilder: (context, isLoading) => isLoading
+                      ? LoadingMessage()
+                      : Text('Submit', style: TextStyle(color: Colors.white)),
+                  onProcess: () async {
+                    await _submitForm(context);
+                    Navigator.of(context).pop();
+                  },
+                ),
               )
             ],
           ),

@@ -21,5 +21,6 @@
   "cleardataalerTitle": "Delete all data?",
   "clearDataAlerTitleMessage": "This action cannot be recovered, are you sure for that?",
   "cancel": "Cancel",
-  "delete": "Delete"
+  "delete": "Delete",
+  "processing": "Processing"
 }

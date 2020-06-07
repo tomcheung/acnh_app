@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/alert.dart';
 import '../../acnh_widget/common_widget.dart';
+import '../../acnh_widget/raised_button_with_loading.dart';
 import '../../core/model/player.dart';
 import '../../core/provider/account_provider.dart';
 import '../../generated/l10n.dart';
@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
           margin: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
             constraints: BoxConstraints.loose(Size(400, 500)),
-            child: _OnBoardingForm(),
+            child: _LoginForm(),
           ),
         ),
       ),
@@ -32,12 +32,12 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class _OnBoardingForm extends StatefulWidget {
+class _LoginForm extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _OnBoardingFormState();
+  State<StatefulWidget> createState() => _LoginFormState();
 }
 
-class _OnBoardingFormState extends State<_OnBoardingForm> {
+class _LoginFormState extends State<_LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _textEditControllerMap = <String, TextEditingController>{};
   bool _isExistingUser = false;
@@ -127,16 +127,15 @@ class _OnBoardingFormState extends State<_OnBoardingForm> {
               Flexible(child: _buildFormField(context, T.loginPagePinCode)),
               HelpIconButton(alertMessage: T.loginPagePinCodeHelpMessage)
             ]),
-          RaisedButton(
-            onPressed: () async {
+          RaisedButtonWithLoading(
+            childBuilder: (context, isLoading) => isLoading
+                ? LoadingMessage()
+                : Text(T.loginPageLogin, style: TextStyle(color: Colors.white)),
+            onProcess: () async {
               if (_formKey.currentState.validate()) {
                 await _doSignin(context);
               }
             },
-            child: Text(
-              T.loginPageLogin,
-              style: TextStyle(color: Colors.white),
-            ),
           ),
         ],
       ),

@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 
-final weekDayString = DateFormat.s()
+final List<String> weekDayString = DateFormat.s()
     .dateSymbols
     .SHORTWEEKDAYS
     .sublist(1)
     .map((w) => w.toUpperCase())
     .toList(growable: false);
 
-final amPmString = DateFormat.s()
+final List<String> amPmString = DateFormat.s()
     .dateSymbols
     .AMPMS;

@@ -42,7 +42,7 @@ class AccountProvider extends ChangeNotifier {
   Future<Player> signin(Player userData) async {
     print(userData.toJson());
     final response = await http.post(
-      '${env.serverRoot}/getUser',
+      '${env.serverRoot}/v1/user',
       body: userData.toJson(),
     );
 

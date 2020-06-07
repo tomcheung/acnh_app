@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pageProfile" : MessageLookupByLibrary.simpleMessage("Profile"),
     "pageTurnip" : MessageLookupByLibrary.simpleMessage("Turnip"),
     "playerName" : MessageLookupByLibrary.simpleMessage("Player Name"),
+    "processing" : MessageLookupByLibrary.simpleMessage("Processing"),
     "profileLogout" : MessageLookupByLibrary.simpleMessage("Logout"),
     "profilePinCodeDescription" : MessageLookupByLibrary.simpleMessage("Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app"),
     "textFieldValidationEmpty" : MessageLookupByLibrary.simpleMessage("Cannot be blank"),

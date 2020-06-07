@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pageProfile" : MessageLookupByLibrary.simpleMessage("個人頁"),
     "pageTurnip" : MessageLookupByLibrary.simpleMessage("大頭菜"),
     "playerName" : MessageLookupByLibrary.simpleMessage("玩家名稱"),
+    "processing" : MessageLookupByLibrary.simpleMessage("處理中"),
     "profileLogout" : MessageLookupByLibrary.simpleMessage("登出"),
     "profilePinCodeDescription" : MessageLookupByLibrary.simpleMessage("Pin code 是一個獨特編號，你需要在其他裝置登入或重娤此App的時候輪入此編號"),
     "textFieldValidationEmpty" : MessageLookupByLibrary.simpleMessage("請輸入內容"),

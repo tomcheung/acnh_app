@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
+import '../../core/api/acnh_api.dart';
 import '../../core/api/error.dart';
-import '../../core/config.dart';
 import '../../core/firebase_service.dart';
 import '../../core/model/friend.dart';
 import '../../core/provider/account_provider.dart';
@@ -40,7 +39,7 @@ class FriendProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> addFriend(Friend user) async {
+  Future<void> addFriend(String friendCode) async {
     final idToken = await FirebaseService.instance.getInstanceId();
 
     if (idToken == null) {
@@ -48,13 +47,8 @@ class FriendProvider extends ChangeNotifier {
       return;
     }
 
-    final response = await http.post('${env.serverRoot}/addFriend', body: {
-      'userId': _accountProvider.currentUser.userId,
-      'idToken': idToken,
-      'friendName': user.playerName,
-      'friendIslandName': user.islandName,
-      'friendPinCode': user.pinCode,
-    });
+    final response = await request(Method.post, 'v1/friend', {'friendCode': friendCode},
+        accountProvider: _accountProvider);
 
     print('idToken: $idToken, userId: ${_accountProvider.currentUser.userId}');
 
@@ -76,11 +70,8 @@ class FriendProvider extends ChangeNotifier {
     }
 
     print('removing friend $user');
-    final response = await http.post('${env.serverRoot}/removeFriend', body: {
-      'userId': _accountProvider.currentUser.userId,
-      'idToken': idToken,
-      'friendId': user.userId
-    });
+    final response = await request(Method.delete, 'v1/friend', {'friendId': user.userId},
+        accountProvider: _accountProvider);
 
     final json = jsonDecode(response.body);
     if (response.statusCode == 200) {

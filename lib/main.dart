@@ -1,7 +1,5 @@
 import 'dart:io' show Platform;
 
-import 'package:acnhpal/page/turnip/prediction/turnip_prediction_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

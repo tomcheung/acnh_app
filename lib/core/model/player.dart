@@ -11,6 +11,7 @@ class Player implements User {
   String pinCode;
   String fbToken;
   String userId;
+  String friendCode;
 
   Player({
     this.playerName,
@@ -18,6 +19,7 @@ class Player implements User {
     this.pinCode,
     this.fbToken,
     this.userId,
+    this.friendCode
   });
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);

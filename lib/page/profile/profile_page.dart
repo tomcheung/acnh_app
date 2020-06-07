@@ -1,14 +1,16 @@
-import 'package:acnhpal/acnh_widget/common_widget.dart';
-import 'package:acnhpal/generated/l10n.dart';
 import 'package:flutter/material.dart' hide TextField, Card;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/alert.dart';
 import '../../acnh_widget/card.dart';
+import '../../acnh_widget/common_widget.dart';
 import '../../acnh_widget/text_field.dart';
+import '../../core/config.dart';
 import '../../core/provider/account_provider.dart';
+import '../../generated/l10n.dart';
 import 'profile_state.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -105,6 +107,11 @@ class _ProfilePassportCard extends StatelessWidget {
     final theme = Theme.of(context);
     final state = context.watch<ProfilePageState>();
     final isEdit = state.isEdit;
+    final user = context.watch<AccountProvider>().currentUser;
+    final smallTextStyle = TextStyle(
+      fontSize: 12,
+      color: theme.textTheme.bodyText2.color,
+    );
 
     return Card(
       leftImage: Image.asset('images/profile_image_sample.png'),
@@ -123,26 +130,41 @@ class _ProfilePassportCard extends StatelessWidget {
           isEdit: isEdit,
           onTextChange: (v) => state.islandName = v,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Consumer<AccountProvider>(
-            builder: (context, account, child) => Row(
-              children: [
-                Text(
-                  'PIN Code: ${account.currentUser?.pinCode ?? ''}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: theme.textTheme.bodyText2.color,
-                  ),
-                ),
-                HelpIconButton(
-                  alertTitle: T.loginPagePinCode,
-                  alertMessage: T.profilePinCodeDescription,
-                )
-              ],
+        Row(
+          children: [
+            Text(
+              'PIN Code: ${user?.pinCode ?? ''}',
+              style: smallTextStyle,
             ),
-          ),
+            HelpIconButton(
+              alertTitle: T.loginPagePinCode,
+              alertMessage: T.profilePinCodeDescription,
+            )
+          ],
         ),
+        Text('Friend code'),
+        if (user.friendCode.isNotEmpty)
+          Row(
+            children: [
+              Flexible(
+                child: Text(
+                  '${env.friendCodePrefix}${user.friendCode.toUpperCase()}',
+                  style: smallTextStyle,
+                ),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                iconSize: 16,
+                icon: Icon(Icons.content_copy),
+                onPressed: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: 'ANH-${user.friendCode.toUpperCase()}'),
+                  );
+                  showAlertMessage(context, 'Friend code copied', null);
+                },
+              )
+            ],
+          ),
       ],
     );
   }
