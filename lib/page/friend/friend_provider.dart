@@ -47,7 +47,7 @@ class FriendProvider extends ChangeNotifier {
       return;
     }
 
-    final response = await request(Method.post, 'v1/friend', {'friendCode': friendCode},
+    final response = await request(Method.post, 'v1/friend', body: {'friendCode': friendCode},
         accountProvider: _accountProvider);
 
     print('idToken: $idToken, userId: ${_accountProvider.currentUser.userId}');
@@ -70,7 +70,7 @@ class FriendProvider extends ChangeNotifier {
     }
 
     print('removing friend $user');
-    final response = await request(Method.delete, 'v1/friend', {'friendId': user.userId},
+    final response = await request(Method.delete, 'v1/friend', body: {'friendId': user.userId},
         accountProvider: _accountProvider);
 
     final json = jsonDecode(response.body);

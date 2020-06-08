@@ -1,13 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import '../model/turnip_price.dart';
+import 'turnip_price_data_source.dart';
 
-abstract class TurnipPriceDataSource {
-  Stream<TurnipPrice> subscribePrice();
-
-  Future<void> updatePrice(TurnipPrice newPrice);
-}
-
-class TurnipPriceFirebaseDataSource implements TurnipPriceDataSource {
+class TurnipPriceFirebaseDataSource extends TurnipPriceDataSource {
   FirebaseDatabase db;
   String userId;
 
@@ -22,19 +17,14 @@ class TurnipPriceFirebaseDataSource implements TurnipPriceDataSource {
         return TurnipPrice.empty();
       }
       return TurnipPrice.fromList(value);
-
-//      var castedList =
-//          value.map((v) => v is int ? v : 0).toList(growable: false);
-
-//      return TurnipPrice(castedList[0], castedList.sublist(1));
     });
   }
 
-  Future<void> updatePrice(TurnipPrice newPrice) async {
-    var priceRef = db.reference().child('usersInfo/$userId');
-    var newValue = [newPrice.purchasePrice, ...newPrice.dailyPrice];
+  Future<void> updatePrice(TurnipPrice current, Map<int, int> newValue) async {
+    var priceRef = db.reference().child('usersInfo/$userId/turnipPrices');
     try {
-      await priceRef.update({'turnipPrices': newValue});
+      await priceRef.update(
+          newValue.map((key, value) => MapEntry(key.toString(), value)));
     } catch (e) {
       print('update error ${e.toString()}');
     }

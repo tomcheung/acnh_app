@@ -16,6 +16,8 @@ class TurnipPrice {
     dailyPrice = castedList.sublist(1);
   }
 
+  List<int> toList() => [purchasePrice, ...dailyPrice];
+
   @override
   String toString() {
     return 'TurnipPrice: ${[purchasePrice, ...dailyPrice]}';

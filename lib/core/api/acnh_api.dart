@@ -12,8 +12,8 @@ enum Method {
   patch
 }
 
-Future<http.Response> request(Method method, String endpoint, body,
-    {AccountProvider accountProvider}) async {
+Future<http.Response> request(Method method, String endpoint,
+    {dynamic body, AccountProvider accountProvider}) async {
   final idToken = await FirebaseService.instance.getInstanceId();
   var headers = {
     'X-userId': accountProvider.currentUser.userId,

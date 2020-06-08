@@ -1,7 +1,12 @@
 import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
 import '../../core/firebase_service.dart';
 import '../../core/model/turnip_price.dart';
 import '../../core/provider/account_provider.dart';
+import '../../core/store/turnip_price_api_datasource.dart';
+import '../../core/store/turnip_price_data_source.dart';
 import '../../core/store/turnip_price_firebase_datasource.dart';
 
 class TurnipProvider {
@@ -17,8 +22,10 @@ class TurnipProvider {
 
   TurnipProvider(AccountProvider accountProvider)
       : _priceSteamController = StreamController<TurnipPrice>.broadcast(),
-        _dataSource = TurnipPriceFirebaseDataSource(
-            FirebaseService.instance.db, accountProvider.currentUser.userId);
+        _dataSource = kIsWeb
+            ? TurnipPriceApiDataSource(accountProvider)
+            : TurnipPriceFirebaseDataSource(FirebaseService.instance.db,
+                accountProvider.currentUser.userId);
 
   void beginSubscribe() {
     print('beginSubscribe');
@@ -30,24 +37,22 @@ class TurnipProvider {
   }
 
   void updateWeekDayPrice(int index, int price) {
-    var newPrice = TurnipPrice.clone(_lastData);
-    newPrice.dailyPrice[index] = price;
-    _dataSource.updatePrice(newPrice);
+    _dataSource.updatePrice(_lastData, {index + 1: price});
   }
 
   void updatePurchasePrice(int price) async {
-    var newPrice = TurnipPrice.clone(_lastData);
-    newPrice.purchasePrice = price;
-    _dataSource.updatePrice(newPrice);
+    _dataSource.updatePrice(_lastData, {0: price});
   }
 
   void clearData() async {
-    await _dataSource.updatePrice(TurnipPrice.empty());
+    await _dataSource.updatePrice(
+        _lastData, TurnipPrice.empty().toList().asMap());
   }
 
   void dispose() {
     _sub?.cancel();
     _priceSteamController.close();
+    _dataSource.dispose();
     print('Price stream closed');
   }
 }
