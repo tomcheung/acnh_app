@@ -142,8 +142,8 @@ class _ProfilePassportCard extends StatelessWidget {
             )
           ],
         ),
-        Text('Friend code'),
-        if (user.friendCode.isNotEmpty)
+        if (user?.friendCode?.isNotEmpty ?? false) ...[
+          Text('Friend code'),
           Row(
             children: [
               Flexible(
@@ -164,7 +164,8 @@ class _ProfilePassportCard extends StatelessWidget {
                 },
               )
             ],
-          ),
+          )
+        ],
       ],
     );
   }

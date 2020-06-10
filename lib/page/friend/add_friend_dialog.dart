@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,11 +24,14 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
   @override
   void initState() {
     super.initState();
-    Clipboard.getData('text/plain').then((clipboardData) {
-      if (clipboardData.text?.startsWith(env.friendCodePrefix) ?? false) {
-        _friendCodeController.text = clipboardData.text;
-      }
-    });
+
+    if (!kIsWeb) {
+      Clipboard.getData('text/plain').then((clipboardData) {
+        if (clipboardData.text?.startsWith(env.friendCodePrefix) ?? false) {
+          _friendCodeController.text = clipboardData.text;
+        }
+      });
+    }
   }
 
   String _validator(String input) {
@@ -61,47 +65,50 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
     final theme = Theme.of(context);
     return Dialog(
       shape: theme.cardTheme.shape,
-      child: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Add Friend', style: theme.textTheme.headline5),
-                    CloseButton()
-                  ],
+      child: ConstrainedBox(
+        constraints: BoxConstraints.tightFor(width: 500),
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Add Friend', style: theme.textTheme.headline5),
+                      CloseButton()
+                    ],
+                  ),
                 ),
-              ),
-              TextFormField(
-                controller: _friendCodeController,
-                style: TextStyle(fontSize: 12),
-                decoration: InputDecoration(
-                  icon: Icon(Icons.person),
-                  labelText: 'Friend code',
+                TextFormField(
+                  controller: _friendCodeController,
+                  style: TextStyle(fontSize: 12),
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.person),
+                    labelText: 'Friend code',
+                  ),
+                  validator: _validator,
                 ),
-                validator: _validator,
-              ),
-              SizedBox(height: 24),
-              Align(
-                alignment: Alignment.centerRight,
-                child: RaisedButtonWithLoading(
-                  childBuilder: (context, isLoading) => isLoading
-                      ? LoadingMessage()
-                      : Text('Submit', style: TextStyle(color: Colors.white)),
-                  onProcess: () async {
-                    await _submitForm(context);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              )
-            ],
+                SizedBox(height: 24),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: RaisedButtonWithLoading(
+                    childBuilder: (context, isLoading) => isLoading
+                        ? LoadingMessage()
+                        : Text('Submit', style: TextStyle(color: Colors.white)),
+                    onProcess: () async {
+                      await _submitForm(context);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -5,10 +5,7 @@ import '../firebase_service.dart';
 import '../model/friend.dart';
 import '../model/pair.dart';
 import '../model/turnip_price.dart';
-
-abstract class FriendPriceDatasource {
-  Stream<List<FriendPrice>> subscribeFriendPrice();
-}
+import 'friend_price_datasource.dart';
 
 class FriendPriceFirebaseDatasource implements FriendPriceDatasource {
   final _db = FirebaseService.instance.db;

@@ -125,7 +125,10 @@ class _FriendPageState extends State<FriendPage> {
                 },
                 child: ListView(
                   children: snapshot.data
-                      .map((d) => _FriendItem(d, isEdit: _isEdit))
+                      .map((d) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: _FriendItem(d, isEdit: _isEdit),
+                      ))
                       .toList(),
                 ),
               );
