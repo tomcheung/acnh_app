@@ -115,7 +115,11 @@ class _FriendPageState extends State<FriendPage> {
               StreamBuilder<List<FriendPrice>>(
             stream: provider.priceStream,
             builder: (context, snapshot) {
-              if ((snapshot.data?.length ?? 0) == 0) {
+              if (snapshot?.data == null) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.data.length == 0) {
                 return Text('Your friend list is empty');
               }
 

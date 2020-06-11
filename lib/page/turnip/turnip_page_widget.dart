@@ -31,7 +31,8 @@ class TurnipTextField extends TextField {
     type: TextInputType.number,
     borderRadius: BorderRadius.circular(12),
     textAlign: TextAlign.center,
-    debounceTime: Duration(milliseconds: 1000),
+    debounceTime: Duration(milliseconds: 200),
     onTextChange: onTextChange,
+    selectOnFocus: true
   );
 }

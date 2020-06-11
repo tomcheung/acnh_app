@@ -10,6 +10,7 @@ class TextField extends StatefulWidget {
   final Duration debounceTime;
   final TextAlign textAlign;
   final BorderRadius borderRadius;
+  final bool selectOnFocus;
   final void Function(String) onTextChange;
 
   const TextField({
@@ -21,6 +22,7 @@ class TextField extends StatefulWidget {
     this.type,
     this.borderRadius = const BorderRadius.all(Radius.circular(90.0)),
     this.debounceTime,
+    this.selectOnFocus = false
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class TextField extends StatefulWidget {
 
 class _TextFieldState extends State<TextField> {
   final TextEditingController editController = TextEditingController();
+  final _focusNode = FocusNode();
   VoidCallback _lastCallback;
   Timer _debounceTimer;
 
@@ -37,6 +40,15 @@ class _TextFieldState extends State<TextField> {
     super.initState();
     editController.text = widget.value;
     editController.addListener(notifyTextChange);
+
+    _focusNode.addListener(() {
+      if (widget.selectOnFocus && _focusNode.hasFocus) {
+        editController.selection = TextSelection(
+          baseOffset: 0,
+          extentOffset: editController.text.length,
+        );
+      }
+    });
   }
 
   @override
@@ -51,7 +63,6 @@ class _TextFieldState extends State<TextField> {
     if (widget.onTextChange == null) {
       return;
     }
-
     if (widget.debounceTime != null) {
       if (_debounceTimer?.isActive ?? false) {
         _debounceTimer.cancel();
@@ -71,7 +82,6 @@ class _TextFieldState extends State<TextField> {
     if (_lastCallback != null) {
       editController.removeListener(_lastCallback);
     }
-    ;
     editController.dispose();
     super.dispose();
   }
@@ -79,6 +89,7 @@ class _TextFieldState extends State<TextField> {
   @override
   Widget build(BuildContext context) {
     return material.TextField(
+      focusNode: _focusNode,
       textAlign: widget.textAlign,
       keyboardType: widget.type,
       controller: editController,

@@ -42,7 +42,8 @@ class _LoginFormState extends State<_LoginForm> {
   final _textEditControllerMap = <String, TextEditingController>{};
   bool _isExistingUser = false;
 
-  Widget _buildFormField(BuildContext context, String fieldName) {
+  Widget _buildFormField(BuildContext context, String fieldName,
+      {TextCapitalization capitalization = TextCapitalization.none}) {
     final T = S.of(context);
 
     if (_textEditControllerMap[fieldName] == null) {
@@ -51,6 +52,7 @@ class _LoginFormState extends State<_LoginForm> {
 
     return TextFormField(
       controller: _textEditControllerMap[fieldName],
+      textCapitalization: capitalization,
       decoration: InputDecoration(
         icon: Icon(Icons.person),
         labelText: fieldName,
@@ -124,7 +126,7 @@ class _LoginFormState extends State<_LoginForm> {
           ),
           if (_isExistingUser)
             Row(mainAxisSize: MainAxisSize.min, children: [
-              Flexible(child: _buildFormField(context, T.loginPagePinCode)),
+              Flexible(child: _buildFormField(context, T.loginPagePinCode, capitalization: TextCapitalization.characters)),
               HelpIconButton(alertMessage: T.loginPagePinCodeHelpMessage)
             ]),
           RaisedButtonWithLoading(
