@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:acnhpal/core/store/friend_price_api_datasource.dart';
-import 'package:acnhpal/core/store/friend_price_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../core/api/acnh_api.dart';
@@ -10,6 +8,8 @@ import '../../core/api/error.dart';
 import '../../core/firebase_service.dart';
 import '../../core/model/friend.dart';
 import '../../core/provider/account_provider.dart';
+import '../../core/store/friend_price_api_datasource.dart';
+import '../../core/store/friend_price_datasource.dart';
 import '../../core/store/friend_price_firebase_datasource.dart';
 import 'friend_price.dart';
 

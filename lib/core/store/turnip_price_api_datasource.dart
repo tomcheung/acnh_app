@@ -9,7 +9,7 @@ import '../provider/account_provider.dart';
 import 'turnip_price_data_source.dart';
 
 class TurnipPriceApiDataSource implements TurnipPriceDataSource {
-  AccountProvider _accountProvider;
+  final AccountProvider _accountProvider;
   final _priceStream = BehaviorSubject<TurnipPrice>();
 
   TurnipPriceApiDataSource(this._accountProvider);

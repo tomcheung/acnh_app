@@ -2,10 +2,11 @@
 // https://github.com/elxris/Turnip-Calculator/blob/4bc81748eaacaffb94f354ecf2062ac532e6758b/wasm/src/patterns.rs
 
 import 'dart:math';
-import 'package:acnhpal/core/model/turnip_price_prediction.dart';
+
 import 'package:equatable/equatable.dart';
 
 import 'model/pair.dart';
+import 'model/turnip_price_prediction.dart';
 
 class MinMax<T> extends Equatable {
   final T min;

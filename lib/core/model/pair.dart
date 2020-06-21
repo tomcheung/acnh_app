@@ -11,11 +11,11 @@ class Pair<K,V> {
   int get hashCode => (shortHash(key) + shortHash(value)).hashCode;
 
   @override
-  bool operator ==(other) {
+  bool operator ==(dynamic other) {
     if (other is Pair) {
       return key == other.key && value == other.value;
     }
-    return super == other;
+    return false;
   }
 
   @override

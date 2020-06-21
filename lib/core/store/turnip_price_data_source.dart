@@ -1,4 +1,4 @@
-import 'package:acnhpal/core/model/turnip_price.dart';
+import '../model/turnip_price.dart';
 
 abstract class TurnipPriceDataSource {
   Stream<TurnipPrice> subscribePrice();

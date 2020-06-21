@@ -1,4 +1,3 @@
-import 'package:acnhpal/core/deeplink/deeplink_data.dart';
 import 'package:flutter/material.dart' hide TextField, Card;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +9,7 @@ import '../../acnh_widget/card.dart';
 import '../../acnh_widget/common_widget.dart';
 import '../../acnh_widget/text_field.dart';
 import '../../core/config.dart';
+import '../../core/deeplink/deeplink_data.dart';
 import '../../core/provider/account_provider.dart';
 import '../../generated/l10n.dart';
 import 'profile_state.dart';

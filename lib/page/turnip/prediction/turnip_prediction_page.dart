@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:acnhpal/core/model/turnip_price_prediction.dart';
-
-import '../../../core/util/date.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +7,9 @@ import 'package:provider/provider.dart';
 import '../../../acnh_widget/acnh_page.dart';
 import '../../../acnh_widget/price_item.dart';
 import '../../../core/model/turnip_price.dart';
+import '../../../core/model/turnip_price_prediction.dart';
 import '../../../core/price_prediction.dart';
+import '../../../core/util/date.dart';
 import '../../../generated/l10n.dart';
 import 'turnip_prediction_provider.dart';
 
@@ -30,10 +29,10 @@ class _TurnipPredictionChart extends StatelessWidget {
   }
 
   FlLine _getDrawingLine(bool showDash) => FlLine(
-    color: Colors.white60,
-    strokeWidth: 1,
-    dashArray: showDash ? null : [1, 2],
-  );
+        color: Colors.white60,
+        strokeWidth: 1,
+        dashArray: showDash ? null : [1, 2],
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +44,7 @@ class _TurnipPredictionChart extends StatelessWidget {
     var currentVal = <FlSpot>[];
     var maxY = 0;
 
-    for (var i=0; i<provider.patternMinMaxRange.length; i++) {
+    for (var i = 0; i < provider.patternMinMaxRange.length; i++) {
       final range = provider.patternMinMaxRange[i];
       final current = provider.currentPrice.dailyPrice[i].toDouble();
       minVal.add(FlSpot(i.toDouble(), range.min.toDouble()));
@@ -206,7 +205,9 @@ class _TurnipPredictionTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TurnipPredictionProvider>();
-    final items = provider.patterns.map((p) => _buildTableRow(p, context)).toList(growable: false);
+    final items = provider.patterns
+        .map((p) => _buildTableRow(p, context))
+        .toList(growable: false);
     return ListView(
       children: items,
       cacheExtent: 100,

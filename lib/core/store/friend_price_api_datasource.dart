@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:acnhpal/core/api/acnh_api.dart';
-import 'package:acnhpal/core/model/friend.dart';
-import 'package:acnhpal/core/model/turnip_price.dart';
-import 'package:acnhpal/core/provider/account_provider.dart';
-import 'package:acnhpal/core/store/friend_price_datasource.dart';
-import 'package:acnhpal/page/friend/friend_price.dart';
+import '../../page/friend/friend_price.dart';
+import '../api/acnh_api.dart';
+import '../model/friend.dart';
+import '../model/turnip_price.dart';
+import '../provider/account_provider.dart';
+import 'friend_price_datasource.dart';
 
 class FriendPriceApiDatasource implements FriendPriceDatasource {
   final AccountProvider _accountProvider;

@@ -1,5 +1,3 @@
-import 'package:acnhpal/core/util/date.dart';
-import 'package:acnhpal/page/turnip/prediction/turnip_prediction_page.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:provider/provider.dart';
 
@@ -8,7 +6,9 @@ import '../../acnh_widget/card.dart';
 import '../../acnh_widget/price_item.dart';
 import '../../core/model/turnip_price.dart';
 import '../../core/provider/account_provider.dart';
+import '../../core/util/date.dart';
 import '../../generated/l10n.dart';
+import '../turnip/prediction/turnip_prediction_page.dart';
 import 'add_friend_dialog.dart';
 import 'friend_price.dart';
 import 'friend_provider.dart';

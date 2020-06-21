@@ -1,12 +1,13 @@
-import 'package:acnhpal/generated/l10n.dart';
-import 'package:acnhpal/page/turnip/prediction/turnip_prediction_page.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbols.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../acnh_widget/acnh_page.dart';
 import '../../core/provider/account_provider.dart';
+import '../../generated/l10n.dart';
+import 'prediction/turnip_prediction_page.dart';
 import 'turnip_page_widget.dart';
 import 'turnip_provider.dart';
 

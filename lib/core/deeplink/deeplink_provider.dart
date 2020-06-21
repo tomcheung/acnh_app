@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:acnhpal/core/deeplink/deeplink_parser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uni_links/uni_links.dart';
 
+import 'deeplink_parser.dart';
+
 class DeeplinkProvider {
-  GlobalKey<NavigatorState> _navigatorKey;
+  final GlobalKey<NavigatorState> _navigatorKey;
   StreamSubscription _sub;
 
   DeeplinkProvider(this._navigatorKey);

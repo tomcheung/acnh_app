@@ -41,9 +41,9 @@ class LoginPage extends StatelessWidget {
 }
 
 class _LoginForm extends StatefulWidget {
-  DeeplinkLoginData deeplinkLoginData;
+  final DeeplinkLoginData deeplinkLoginData;
 
-  _LoginForm({Key key, this.deeplinkLoginData}): super(key: key);
+  _LoginForm({Key key, this.deeplinkLoginData}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _LoginFormState();
@@ -109,7 +109,7 @@ class _LoginFormState extends State<_LoginForm> {
           context, 'Login fail', 'Signin fail, please try again later');
     }
   }
-  
+
   _handleDeeplinkData(BuildContext context) {
     final provider = Provider.of<AccountProvider>(context);
     if (_pendingDeeplinkLoginData != null) {
@@ -157,7 +157,13 @@ class _LoginFormState extends State<_LoginForm> {
           ),
           if (_isExistingUser)
             Row(mainAxisSize: MainAxisSize.min, children: [
-              Flexible(child: _buildFormField(context, T.loginPagePinCode, capitalization: TextCapitalization.characters)),
+              Flexible(
+                child: _buildFormField(
+                  context,
+                  T.loginPagePinCode,
+                  capitalization: TextCapitalization.characters,
+                ),
+              ),
               HelpIconButton(alertMessage: T.loginPagePinCodeHelpMessage)
             ]),
           RaisedButtonWithLoading(

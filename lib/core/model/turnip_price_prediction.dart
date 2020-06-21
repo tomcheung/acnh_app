@@ -1,5 +1,6 @@
-import 'package:acnhpal/generated/l10n.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../generated/l10n.dart';
 
 enum TurnipPricePattern {
   fluctuating,
