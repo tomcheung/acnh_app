@@ -5,6 +5,7 @@ import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/alert.dart';
 import '../../acnh_widget/common_widget.dart';
 import '../../acnh_widget/raised_button_with_loading.dart';
+import '../../core/deeplink/deeplink_data.dart';
 import '../../core/model/player.dart';
 import '../../core/provider/account_provider.dart';
 import '../../generated/l10n.dart';
@@ -12,6 +13,13 @@ import '../../generated/l10n.dart';
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var args = ModalRoute.of(context).settings.arguments;
+    if (args is DeeplinkLoginData) {
+      args = args as DeeplinkLoginData;
+    } else {
+      args = null;
+    }
+
     final T = S.of(context);
     return AcnhPage(
       title: T.loginPageTitle,
@@ -24,7 +32,7 @@ class LoginPage extends StatelessWidget {
           margin: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
             constraints: BoxConstraints.loose(Size(400, 500)),
-            child: _LoginForm(),
+            child: _LoginForm(deeplinkLoginData: args),
           ),
         ),
       ),
@@ -33,6 +41,10 @@ class LoginPage extends StatelessWidget {
 }
 
 class _LoginForm extends StatefulWidget {
+  DeeplinkLoginData deeplinkLoginData;
+
+  _LoginForm({Key key, this.deeplinkLoginData}): super(key: key);
+
   @override
   State<StatefulWidget> createState() => _LoginFormState();
 }
@@ -40,7 +52,14 @@ class _LoginForm extends StatefulWidget {
 class _LoginFormState extends State<_LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _textEditControllerMap = <String, TextEditingController>{};
+  DeeplinkLoginData _pendingDeeplinkLoginData;
   bool _isExistingUser = false;
+
+  @override
+  void initState() {
+    _pendingDeeplinkLoginData = widget.deeplinkLoginData;
+    super.initState();
+  }
 
   Widget _buildFormField(BuildContext context, String fieldName,
       {TextCapitalization capitalization = TextCapitalization.none}) {
@@ -70,7 +89,7 @@ class _LoginFormState extends State<_LoginForm> {
     return _textEditControllerMap[fieldName]?.text;
   }
 
-  Future<void> _doSignin(BuildContext context) async {
+  Future<void> _handleSignin(BuildContext context) async {
     final T = S.of(context);
     final provider = context.read<AccountProvider>();
 
@@ -90,6 +109,15 @@ class _LoginFormState extends State<_LoginForm> {
           context, 'Login fail', 'Signin fail, please try again later');
     }
   }
+  
+  _handleDeeplinkData(BuildContext context) {
+    final provider = Provider.of<AccountProvider>(context);
+    if (_pendingDeeplinkLoginData != null) {
+      print('login from deeplink');
+      provider.signin(_pendingDeeplinkLoginData.loginInfo);
+      _pendingDeeplinkLoginData = null;
+    }
+  }
 
   @override
   void dispose() {
@@ -102,6 +130,9 @@ class _LoginFormState extends State<_LoginForm> {
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);
+
+    _handleDeeplinkData(context);
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -135,7 +166,7 @@ class _LoginFormState extends State<_LoginForm> {
                 : Text(T.loginPageLogin, style: TextStyle(color: Colors.white)),
             onProcess: () async {
               if (_formKey.currentState.validate()) {
-                await _doSignin(context);
+                await _handleSignin(context);
               }
             },
           ),

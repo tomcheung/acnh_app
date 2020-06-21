@@ -138,6 +138,8 @@ class _TurnipPredictionChart extends StatelessWidget {
 }
 
 class TurnipPredictionPage extends StatelessWidget {
+  static const routeName = '/turnip/prediction';
+
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);

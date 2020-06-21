@@ -77,6 +77,8 @@ class _FriendItem extends StatelessWidget {
 }
 
 class FriendPage extends StatefulWidget {
+  static const routeName = '/friend';
+
   @override
   _FriendPageState createState() => _FriendPageState();
 }

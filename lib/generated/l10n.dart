@@ -8,8 +8,12 @@ import 'intl/messages_all.dart';
 // Made by Localizely
 // **************************************************************************
 
+// ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
+
 class S {
   S();
+  
+  static S current;
   
   static const AppLocalizationDelegate delegate =
     AppLocalizationDelegate();
@@ -19,7 +23,9 @@ class S {
     final localeName = Intl.canonicalizedLocale(name); 
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
-      return S();
+      S.current = S();
+      
+      return S.current;
     });
   } 
 
@@ -27,6 +33,7 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Player Name`
   String get playerName {
     return Intl.message(
       'Player Name',
@@ -36,6 +43,7 @@ class S {
     );
   }
 
+  /// `Island Name`
   String get islandName {
     return Intl.message(
       'Island Name',
@@ -45,6 +53,7 @@ class S {
     );
   }
 
+  /// `Cannot be blank`
   String get textFieldValidationEmpty {
     return Intl.message(
       'Cannot be blank',
@@ -54,6 +63,7 @@ class S {
     );
   }
 
+  /// `Turnip`
   String get pageTurnip {
     return Intl.message(
       'Turnip',
@@ -63,6 +73,7 @@ class S {
     );
   }
 
+  /// `Friends`
   String get pageFriends {
     return Intl.message(
       'Friends',
@@ -72,6 +83,7 @@ class S {
     );
   }
 
+  /// `Profile`
   String get pageProfile {
     return Intl.message(
       'Profile',
@@ -81,6 +93,7 @@ class S {
     );
   }
 
+  /// `Welcome`
   String get loginPageTitle {
     return Intl.message(
       'Welcome',
@@ -90,6 +103,7 @@ class S {
     );
   }
 
+  /// `Existing user?`
   String get loginPageExistingUser {
     return Intl.message(
       'Existing user?',
@@ -99,6 +113,7 @@ class S {
     );
   }
 
+  /// `Pin code for previous account`
   String get loginPagePinCode {
     return Intl.message(
       'Pin code for previous account',
@@ -108,6 +123,7 @@ class S {
     );
   }
 
+  /// `Pin code is 6 character code to identify your account, you can find this code in profile page from logged in device`
   String get loginPagePinCodeHelpMessage {
     return Intl.message(
       'Pin code is 6 character code to identify your account, you can find this code in profile page from logged in device',
@@ -117,6 +133,7 @@ class S {
     );
   }
 
+  /// `Login`
   String get loginPageLogin {
     return Intl.message(
       'Login',
@@ -126,6 +143,7 @@ class S {
     );
   }
 
+  /// `Login fail`
   String get loginPageLoginErrorTitle {
     return Intl.message(
       'Login fail',
@@ -135,6 +153,7 @@ class S {
     );
   }
 
+  /// `Purchase Price`
   String get turnipPurchasePrice {
     return Intl.message(
       'Purchase Price',
@@ -144,6 +163,7 @@ class S {
     );
   }
 
+  /// `Predict Price`
   String get turnipPredictPrice {
     return Intl.message(
       'Predict Price',
@@ -153,6 +173,7 @@ class S {
     );
   }
 
+  /// `Turnip Price Prediction`
   String get turnipPredictPageTitle {
     return Intl.message(
       'Turnip Price Prediction',
@@ -162,6 +183,7 @@ class S {
     );
   }
 
+  /// `Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app`
   String get profilePinCodeDescription {
     return Intl.message(
       'Pin code is a unique identifier associate with your account, you need to use this code if you want to login on other device / reinstall this app',
@@ -171,6 +193,7 @@ class S {
     );
   }
 
+  /// `Logout`
   String get profileLogout {
     return Intl.message(
       'Logout',
@@ -180,6 +203,7 @@ class S {
     );
   }
 
+  /// `Clear all data`
   String get clearAllData {
     return Intl.message(
       'Clear all data',
@@ -189,6 +213,7 @@ class S {
     );
   }
 
+  /// `Delete all data?`
   String get cleardataalerTitle {
     return Intl.message(
       'Delete all data?',
@@ -198,6 +223,7 @@ class S {
     );
   }
 
+  /// `This action cannot be recovered, are you sure for that?`
   String get clearDataAlerTitleMessage {
     return Intl.message(
       'This action cannot be recovered, are you sure for that?',
@@ -207,6 +233,7 @@ class S {
     );
   }
 
+  /// `Cancel`
   String get cancel {
     return Intl.message(
       'Cancel',
@@ -216,6 +243,7 @@ class S {
     );
   }
 
+  /// `Delete`
   String get delete {
     return Intl.message(
       'Delete',
@@ -225,6 +253,7 @@ class S {
     );
   }
 
+  /// `Processing`
   String get processing {
     return Intl.message(
       'Processing',
@@ -234,6 +263,7 @@ class S {
     );
   }
 
+  /// `Fluctuating`
   String get fluctuating {
     return Intl.message(
       'Fluctuating',
@@ -243,6 +273,7 @@ class S {
     );
   }
 
+  /// `Small Spike`
   String get smallSpike {
     return Intl.message(
       'Small Spike',
@@ -252,6 +283,7 @@ class S {
     );
   }
 
+  /// `Large Spike`
   String get largeSpike {
     return Intl.message(
       'Large Spike',
@@ -261,10 +293,41 @@ class S {
     );
   }
 
+  /// `Decreasing`
   String get decreasing {
     return Intl.message(
       'Decreasing',
       name: 'decreasing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy login magic link`
+  String get copyLoginMagicLink {
+    return Intl.message(
+      'Copy login magic link',
+      name: 'copyLoginMagicLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Magic link copied`
+  String get magicLinkCopiedTitle {
+    return Intl.message(
+      'Magic link copied',
+      name: 'magicLinkCopiedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can use this link to login in other device`
+  String get magicLinkCopiedMessage {
+    return Intl.message(
+      'You can use this link to login in other device',
+      name: 'magicLinkCopiedMessage',
       desc: '',
       args: [],
     );

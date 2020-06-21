@@ -228,6 +228,8 @@ class _TurnipActions extends StatelessWidget {
 }
 
 class TurnipHomePage extends StatelessWidget {
+  static const routeName = '/turnip';
+
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);

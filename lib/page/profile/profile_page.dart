@@ -1,3 +1,4 @@
+import 'package:acnhpal/core/deeplink/deeplink_data.dart';
 import 'package:flutter/material.dart' hide TextField, Card;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -13,11 +14,31 @@ import '../../core/provider/account_provider.dart';
 import '../../generated/l10n.dart';
 import 'profile_state.dart';
 
+enum _ProfilePageMoreOptions { saveProfile }
+
 class ProfilePage extends StatelessWidget {
+  static const routeName = '/profile';
+
+  _showUserToken(BuildContext context) {
+    final currentUser = context.read<AccountProvider>().currentUser;
+    final data = DeeplinkLoginData(currentUser);
+    final link =
+        '${env.universalLinkHost}/login?token=${data.toBase64String()}';
+    Clipboard.setData(ClipboardData(text: link));
+    showAlertMessage(context, S.of(context).magicLinkCopiedTitle, null);
+  }
+
+  _handleMoreMenu(BuildContext context, _ProfilePageMoreOptions option) {
+    switch (option) {
+      case _ProfilePageMoreOptions.saveProfile:
+        _showUserToken(context);
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);
-
     final accountProvider =
         Provider.of<AccountProvider>(context, listen: false);
     final currentUser = accountProvider.currentUser;
@@ -28,6 +49,22 @@ class ProfilePage extends StatelessWidget {
         islandName: currentUser.islandName,
       ),
       child: AcnhPage(
+        actions: [
+          PopupMenuButton<_ProfilePageMoreOptions>(
+            onSelected: (option) => _handleMoreMenu(context, option),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: _ProfilePageMoreOptions.saveProfile,
+                child: ListTile(
+                  leading: Icon(Icons.account_circle),
+                  title: Text(T.copyLoginMagicLink),
+                  dense: true,
+                  contentPadding: EdgeInsets.all(0),
+                ),
+              )
+            ],
+          )
+        ],
         title: T.pageProfile,
 //        floatingActionButton: Consumer<ProfilePageState>(
 //          builder: (context, state, child) => FloatingActionButton(

@@ -26,5 +26,9 @@
   "fluctuating": "Fluctuating",
   "smallSpike": "Small Spike",
   "largeSpike": "Large Spike",
-  "decreasing": "Decreasing"
+  "decreasing": "Decreasing",
+  "copyLoginMagicLink": "Copy login magic link",
+  "magicLinkCopiedTitle": "Magic link copied",
+  "magicLinkCopiedMessage": "You can use this link to login in other device"
+
 }

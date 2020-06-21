@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class AppConfig {
   final String serverRoot;
   final String friendCodePrefix = 'ANH-';
+  final String universalLinkHost = 'https://acnh-abb83.web.app';
 
   const AppConfig({@required this.serverRoot});
 

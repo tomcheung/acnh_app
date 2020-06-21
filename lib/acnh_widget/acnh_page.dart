@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../generated/l10n.dart';
+import '../page/profile/profile_page.dart';
+import '../page/turnip/turnip_page.dart';
 import 'profile_view.dart';
 
 class _NavigateDrawerItem extends StatelessWidget {
@@ -30,9 +32,9 @@ class _AcnhDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(children: <Widget>[
         ProfileView(),
-        _NavigateDrawerItem(T.pageTurnip, '/'),
+        _NavigateDrawerItem(T.pageTurnip, TurnipHomePage.routeName),
         _NavigateDrawerItem(T.pageFriends, '/friend'),
-        _NavigateDrawerItem(T.pageProfile, '/profile'),
+        _NavigateDrawerItem(T.pageProfile, ProfilePage.routeName),
       ]),
     );
   }

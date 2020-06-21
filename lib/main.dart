@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'core/deeplink/deeplink_parser.dart';
+import 'core/deeplink/deeplink_provider.dart';
 import 'core/firebase_service.dart';
 import 'core/provider/account_provider.dart';
 import 'generated/l10n.dart';
@@ -14,12 +17,30 @@ import 'page/turnip/turnip_page.dart';
 void main() => runApp(AcnhApp());
 
 class AcnhApp extends StatelessWidget {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  final _routeMapping = {
+    TurnipHomePage.routeName: TurnipHomePage(),
+    ProfilePage.routeName: ProfilePage(),
+    TurnipPredictionPage.routeName: TurnipPredictionPage(),
+    FriendPage.routeName: FriendPage(),
+  };
+
   @override
   Widget build(BuildContext context) {
     FirebaseService.instance.setup();
 
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: AccountProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AccountProvider()),
+        if (!kIsWeb)
+          Provider(
+            create: (context) => DeeplinkProvider(_navigatorKey)..initUniLink(),
+            dispose: (context, provider) => provider.dispose(),
+            // no other page will use DeeplinkProvider,
+            // need set lazy to false to make sure it will init
+            lazy: false,
+          )
+      ],
       child: MaterialApp(
         localizationsDelegates: [
           S.delegate,
@@ -27,6 +48,7 @@ class AcnhApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
+        navigatorKey: _navigatorKey,
         supportedLocales: S.delegate.supportedLocales,
         title: 'Animal crossing',
         // TODO: Move theme to separate file
@@ -62,31 +84,52 @@ class AcnhApp extends StatelessWidget {
             ),
           ),
         ),
-        routes: {
-          '/': (context) => RootPage(),
-          '/profile': (context) => ProfilePage(),
-          '/friend': (context) => FriendPage(),
-          '/turnip/prediction': (context) => TurnipPredictionPage()
-        },
+        onGenerateRoute: _generateRoute,
+        onGenerateInitialRoutes: _generateInitialRoute,
       ),
+    );
+  }
+
+  List<Route<dynamic>> _generateInitialRoute(String initialRouteName) {
+    final defaultRouteSetting = RouteSettings(name: initialRouteName);
+    if (kIsWeb) {
+      var uri = Uri.parse(initialRouteName);
+      var routeSetting = parseDeeplink(uri) ?? defaultRouteSetting;
+      return [_generateRoute(routeSetting)];
+    } else {
+      return [_generateRoute(defaultRouteSetting)];
+    }
+  }
+
+  MaterialPageRoute _generateRoute(RouteSettings settings) {
+    return MaterialPageRoute(
+      maintainState: false,
+      builder: (context) {
+        final accountProvider = context.watch<AccountProvider>();
+        if (accountProvider.isLoading) {
+          return SplashScreen();
+        }
+
+        if (accountProvider.currentUser == null) {
+          return LoginPage();
+        }
+
+        return _routeMapping[settings?.name] ?? TurnipHomePage();
+      },
+      settings: settings,
     );
   }
 }
 
-class RootPage extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final accountProvider = context.watch<AccountProvider>();
-    if (accountProvider.isLoading) {
-      return Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      return (accountProvider.currentUser == null)
-          ? LoginPage()
-          : TurnipHomePage();
-    }
+    final theme = Theme.of(context);
+    return Container(
+      color: theme.backgroundColor,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }

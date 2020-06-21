@@ -15,7 +15,7 @@
   "turnipPurchasePrice": "購入價",
   "turnipPredictPrice": "預測菜價",
   "turnipPredictPageTitle": "菜價估算",
-  "profilePinCodeDescription": "Pin code 是一個獨特編號，你需要在其他裝置登入或重娤此App的時候輪入此編號",
+  "profilePinCodeDescription": "Pin code 是一個獨特編號，你需要在其他裝置登入或重裝此App的時候輪入此編號",
   "profileLogout": "登出",
   "clearAllData": "清除所有資料",
   "cleardataalerTitle": "確定清除所有資料?",
@@ -26,5 +26,8 @@
   "fluctuating": "波型",
   "smallSpike": "4期型",
   "largeSpike": "3期型",
-  "decreasing": "遞減型"
+  "decreasing": "遞減型",
+  "copyLoginMagicLink": "複制快速登入連結",
+  "magicLinkCopiedTitle": "登入連結已複制",
+  "magicLinkCopiedMessage": "你可以利用此連結在其他裝置快速登入本帳戶"
 }
