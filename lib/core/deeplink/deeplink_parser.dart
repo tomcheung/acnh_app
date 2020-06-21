@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../page/friend/friend_page.dart';
 import 'deeplink_data.dart';
 
 RouteSettings parseDeeplink(Uri uri) {
@@ -7,18 +8,30 @@ RouteSettings parseDeeplink(Uri uri) {
     return null;
   }
   var routeNanme = uri.pathSegments[0];
-  if (routeNanme == '#') {
-    routeNanme = uri.pathSegments[1];
-  }
 
   print('parseDeeplink $routeNanme');
 
   switch (routeNanme) {
     case 'login':
       return _parseLoginDeeplink(uri);
+    case 'friend':
+      return _parseFriendDeeplink(uri);
     default:
       return null;
   }
+}
+
+RouteSettings _parseFriendDeeplink(Uri uri) {
+  final friendId = uri.queryParameters['friend_id'];
+  if (friendId == null) {
+    print('add friend from deeplink error: friend_id is missing');
+    return null;
+  }
+
+  return RouteSettings(
+    name: FriendPage.routeName,
+    arguments: DeeplinkFriendAddData(friendId),
+  );
 }
 
 RouteSettings _parseLoginDeeplink(Uri uri) {
@@ -27,8 +40,6 @@ RouteSettings _parseLoginDeeplink(Uri uri) {
     print('Parse login info error: token is missing');
     return null;
   }
-
-  print('deeplink login $token');
 
   try {
     final loginData = DeeplinkLoginData.fromBase64String(token);

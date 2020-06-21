@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../core/api/acnh_api.dart';
 import '../../core/api/error.dart';
+import '../../core/config.dart';
+import '../../core/deeplink/deeplink_data.dart';
 import '../../core/firebase_service.dart';
 import '../../core/model/friend.dart';
 import '../../core/provider/account_provider.dart';
@@ -23,10 +26,22 @@ class FriendProvider extends ChangeNotifier {
 
   Stream<List<FriendPrice>> get priceStream => _priceStreamController.stream;
 
-  FriendProvider(this._accountProvider)
+  FriendProvider(this._accountProvider, DeeplinkFriendAddData deeplinkData)
       : _dataSource = kIsWeb
             ? FriendPriceApiDatasource(_accountProvider)
-            : FriendPriceFirebaseDatasource();
+            : FriendPriceFirebaseDatasource() {
+    _handleDeeplink(deeplinkData);
+  }
+
+  _handleDeeplink(DeeplinkFriendAddData data) {
+    if (data == null) {
+      return;
+    }
+
+    addFriend(data.friendId).catchError((error) {
+      print('addFriend from deeplink error: $error');
+    });
+  }
 
   void subscribeFriendPrice() async {
     print('fetching friend price list');
@@ -45,6 +60,8 @@ class FriendProvider extends ChangeNotifier {
   }
 
   Future<void> addFriend(String friendCode) async {
+    final friendCodeNoPrefix =
+        friendCode.replaceFirst(env.friendCodePrefix, '');
     final idToken = await FirebaseService.instance.getInstanceId();
 
     if (idToken == null) {
@@ -52,8 +69,12 @@ class FriendProvider extends ChangeNotifier {
       return;
     }
 
-    final response = await request(Method.post, 'v1/friend',
-        body: {'friendCode': friendCode}, accountProvider: _accountProvider);
+    final response = await request(
+      Method.post,
+      'v1/friend',
+      body: {'friendCode': friendCodeNoPrefix},
+      accountProvider: _accountProvider,
+    );
 
     print('idToken: $idToken, userId: ${_accountProvider.currentUser.userId}');
 
@@ -75,7 +96,8 @@ class FriendProvider extends ChangeNotifier {
     }
 
     print('removing friend ${user.playerName} [${user.userId}]');
-    final response = await request(Method.delete, 'v1/friend/${user.userId}', accountProvider: _accountProvider);
+    final response = await request(Method.delete, 'v1/friend/${user.userId}',
+        accountProvider: _accountProvider);
 
     final json = jsonDecode(response.body);
     if (response.statusCode == 200) {

@@ -138,6 +138,14 @@ class _ProfilePassportCard extends StatelessWidget {
 
   const _ProfilePassportCard({Key key, this.isEdit = false});
 
+  _copyFriendLink(BuildContext context) async {
+    final user = context.read<AccountProvider>().currentUser;
+    final link =
+        '${env.universalLinkHost}/friend?friend_id=ANH-${user.friendCode.toUpperCase()}';
+    await Clipboard.setData(ClipboardData(text: link));
+    showAlertMessage(context, 'Friend code copied', null);
+  }
+
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);
@@ -194,10 +202,7 @@ class _ProfilePassportCard extends StatelessWidget {
                 iconSize: 16,
                 icon: Icon(Icons.content_copy),
                 onPressed: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: 'ANH-${user.friendCode.toUpperCase()}'),
-                  );
-                  showAlertMessage(context, 'Friend code copied', null);
+                  await _copyFriendLink(context);
                 },
               )
             ],

@@ -19,9 +19,12 @@ class DeeplinkProvider {
       print('DeeplinkProvider already subscript uri link');
     }
 
-    _sub = getUriLinksStream().listen((uri) {
-      print('deeplink $uri');
+    _sub = getLinksStream().listen((link) {
+      // Shared link will have /#/ in web support
+      final uri = Uri.parse(link.replaceFirst('/#/', '/'));
+      print('deeplink uri $uri');
       final routeSetting = parseDeeplink(uri);
+      print('deeplink result $uri: $routeSetting');
       if (routeSetting != null) {
         _navigatorKey.currentState.pushReplacementNamed(
           routeSetting.name,

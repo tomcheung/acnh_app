@@ -1,3 +1,4 @@
+import 'package:acnhpal/core/deeplink/deeplink_data.dart';
 import 'package:flutter/material.dart' hide Card;
 import 'package:provider/provider.dart';
 
@@ -98,11 +99,18 @@ class _FriendPageState extends State<FriendPage> {
 
   @override
   Widget build(BuildContext context) {
+    DeeplinkFriendAddData deeplinkData =
+        ModalRoute.of(context).settings.arguments;
+
+    if (deeplinkData != null && !(deeplinkData is DeeplinkFriendAddData)) {
+      deeplinkData = null;
+    }
     final T = S.of(context);
     return ChangeNotifierProvider(
       create: (context) {
         final accountProvider = context.read<AccountProvider>();
-        return FriendProvider(accountProvider)..subscribeFriendPrice();
+        return FriendProvider(accountProvider, deeplinkData)
+          ..subscribeFriendPrice();
       },
       child: AcnhPage(
         title: T.pageFriends,
@@ -132,9 +140,9 @@ class _FriendPageState extends State<FriendPage> {
                 child: ListView(
                   children: snapshot.data
                       .map((d) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _FriendItem(d, isEdit: _isEdit),
-                      ))
+                            padding: const EdgeInsets.all(8.0),
+                            child: _FriendItem(d, isEdit: _isEdit),
+                          ))
                       .toList(),
                 ),
               );

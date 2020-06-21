@@ -27,8 +27,11 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
 
     if (!kIsWeb) {
       Clipboard.getData('text/plain').then((clipboardData) {
-        if (clipboardData.text?.startsWith(env.friendCodePrefix) ?? false) {
-          _friendCodeController.text = clipboardData.text;
+        var text = clipboardData.text ?? '';
+        var prefixIndex = text.indexOf(env.friendCodePrefix);
+        if (prefixIndex != -1) {
+          _friendCodeController.text =
+              text.substring(prefixIndex + env.friendCodePrefix.length);
         }
       });
     }
@@ -46,11 +49,8 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
       return;
     }
 
-    final friendId =
-        _friendCodeController.text.replaceFirst(env.friendCodePrefix, '');
-
     try {
-      await widget.friendProvider.addFriend(friendId);
+      await widget.friendProvider.addFriend(_friendCodeController.text);
     } on ApiError catch (error) {
       showAlertMessage(context, 'Cannot add friend', error.error);
       print('addfrend error: $error}');

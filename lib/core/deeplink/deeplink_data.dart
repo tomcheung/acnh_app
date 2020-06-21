@@ -5,9 +5,9 @@ import '../model/player.dart';
 class DeeplinkLoginData {
   static final stringToBase64 = utf8.fuse(base64);
 
-  Player loginInfo;
+  final Player loginInfo;
 
-  DeeplinkLoginData(this.loginInfo);
+  const DeeplinkLoginData(this.loginInfo);
 
   factory DeeplinkLoginData.fromBase64String(String base64String) {
     var decoded = stringToBase64.decode(base64String);
@@ -21,4 +21,9 @@ class DeeplinkLoginData {
     value.removeWhere((key, value) => !extractKey.contains(key));
     return stringToBase64.encode(jsonEncode(value));
   }
+}
+
+class DeeplinkFriendAddData {
+  final String friendId;
+  const DeeplinkFriendAddData(this.friendId);
 }
