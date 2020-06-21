@@ -44,13 +44,12 @@ class AccountProvider extends ChangeNotifier {
   }
 
   Future<Player> signin(Player userData) async {
-    print(userData.toJson());
     final response = await http.post(
       '${env.serverRoot}/v1/user',
       body: userData.toJson(),
     );
 
-    print('Sign api response: ${response.body}');
+    print('sign in');
     Player userResponse;
 
     if (response.statusCode == 200) {
@@ -61,15 +60,13 @@ class AccountProvider extends ChangeNotifier {
       _userData = userResponse;
       await SharedPreferenceStore.instance.setUserData(_userData);
 
-      final authResult =
-          await FirebaseService.instance.signIn(userResponse.fbToken);
-      print('SignIn firebase $authResult');
+      await FirebaseService.instance.signIn(userResponse.fbToken);
 
       _isLoading = false;
       notifyListeners();
       return _userData;
     } else {
-      throw SigninError('Invalid login info');
+      throw SigninError('sign in error');
     }
   }
 }
