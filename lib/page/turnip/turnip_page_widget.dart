@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide TextField;
 
 import '../../acnh_widget/text_field.dart';
@@ -31,7 +32,7 @@ class TurnipTextField extends TextField {
     type: TextInputType.number,
     borderRadius: BorderRadius.circular(12),
     textAlign: TextAlign.center,
-    debounceTime: Duration(milliseconds: 200),
+    debounceTime: Duration(milliseconds: kIsWeb ? 350 : 200),
     onTextChange: onTextChange,
     selectOnFocus: true
   );

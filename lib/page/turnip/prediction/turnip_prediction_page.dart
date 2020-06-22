@@ -44,6 +44,9 @@ class _TurnipPredictionChart extends StatelessWidget {
     var currentVal = <FlSpot>[];
     var maxY = 0;
 
+    print('patternMinMaxRange');
+    print('patternMinMaxRange ${provider.patternMinMaxRange}');
+
     for (var i = 0; i < provider.patternMinMaxRange.length; i++) {
       final range = provider.patternMinMaxRange[i];
       final current = provider.currentPrice.dailyPrice[i].toDouble();
@@ -113,18 +116,18 @@ class _TurnipPredictionChart extends StatelessWidget {
           ),
           lineBarsData: [
             LineChartBarData(
-              dotData: FlDotData(show: false),
+              dotData: FlDotData(dotSize: 3),
               isCurved: true,
               spots: minVal,
               colors: [theme.primaryColorLight],
             ),
             LineChartBarData(
-              dotData: FlDotData(show: false),
+              dotData: FlDotData(dotSize: 3),
               isCurved: true,
               spots: maxVal,
               colors: [theme.primaryColorLight],
             ),
-            LineChartBarData(
+            if (currentVal.isNotEmpty) LineChartBarData(
               isCurved: true,
               spots: currentVal,
               colors: [Color(0xFFFFF09C)],

@@ -38,7 +38,7 @@ class TurnipPriceApiDataSource implements TurnipPriceDataSource {
         accountProvider: _accountProvider, body: param);
 
     var json = jsonDecode(result.body);
-    if (json == null && json['updatedValue'] == null) {
+    if (json != null && json['updatedValue'] != null) {
       var newPriceInArray = current.toList();
       newValue.forEach((key, value) {
         newPriceInArray[key] = value;
