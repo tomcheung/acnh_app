@@ -3,15 +3,17 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../acnh_widget/acnh_page.dart';
-import '../../../acnh_widget/price_item.dart';
 import '../../../core/model/turnip_price.dart';
-import '../../../core/model/turnip_price_prediction.dart';
 import '../../../core/price_prediction.dart';
 import '../../../core/util/date.dart';
 import '../../../generated/l10n.dart';
 import 'turnip_prediction_provider.dart';
+import 'turnip_prediction_table.dart';
+
+enum _PredictionPageMoreOptions { openExternalLink }
 
 extension MinMaxWidgetString on MinMax {
   String toWidgetText() => '${this.min} - ${this.max}';
@@ -43,9 +45,6 @@ class _TurnipPredictionChart extends StatelessWidget {
     var maxVal = <FlSpot>[];
     var currentVal = <FlSpot>[];
     var maxY = 0;
-
-    print('patternMinMaxRange');
-    print('patternMinMaxRange ${provider.patternMinMaxRange}');
 
     for (var i = 0; i < provider.patternMinMaxRange.length; i++) {
       final range = provider.patternMinMaxRange[i];
@@ -127,11 +126,12 @@ class _TurnipPredictionChart extends StatelessWidget {
               spots: maxVal,
               colors: [theme.primaryColorLight],
             ),
-            if (currentVal.isNotEmpty) LineChartBarData(
-              isCurved: true,
-              spots: currentVal,
-              colors: [Color(0xFFFFF09C)],
-            )
+            if (currentVal.isNotEmpty)
+              LineChartBarData(
+                isCurved: true,
+                spots: currentVal,
+                colors: [Color(0xFFFFF09C)],
+              )
           ],
         ),
       ),
@@ -142,6 +142,25 @@ class _TurnipPredictionChart extends StatelessWidget {
 class TurnipPredictionPage extends StatelessWidget {
   static const routeName = '/turnip/prediction';
 
+  _openExternalPage(BuildContext context) async {
+    final TurnipPredictionArguments args =
+        ModalRoute.of(context).settings.arguments;
+    final param = args.inputPrice.toList().fold(
+        '', (prev, price) => '$prev-${(price > 0) ? price.toString() : ''}');
+    final url = 'https://ac-turnip.com/share?f=$param';
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
+  _handleMoreMenu(BuildContext context, _PredictionPageMoreOptions option) {
+    switch (option) {
+      case _PredictionPageMoreOptions.openExternalLink:
+        _openExternalPage(context);
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final T = S.of(context);
@@ -149,11 +168,25 @@ class TurnipPredictionPage extends StatelessWidget {
     final TurnipPredictionArguments args =
         ModalRoute.of(context).settings.arguments;
 
-    print(args.inputPrice);
-
     return AcnhPage(
       title: T.turnipPredictPageTitle,
       showDrawer: false,
+      actions: [
+        PopupMenuButton<_PredictionPageMoreOptions>(
+          onSelected: (option) => _handleMoreMenu(context, option),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: _PredictionPageMoreOptions.openExternalLink,
+              child: ListTile(
+                leading: Icon(Icons.open_in_browser),
+                title: Text('Open in ac-turnip.com'),
+                dense: true,
+                contentPadding: EdgeInsets.all(0),
+              ),
+            )
+          ],
+        )
+      ],
       child: ListenableProvider(
         create: (content) =>
             TurnipPredictionProvider()..computePrice(args.inputPrice),
@@ -161,59 +194,20 @@ class TurnipPredictionPage extends StatelessWidget {
           padding: EdgeInsets.all(12),
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),
+            constraints: BoxConstraints(maxWidth: 800),
             child: Column(
               children: [
                 SizedBox(
                   child: _TurnipPredictionChart(),
                   height: 300,
                 ),
-                Expanded(child: _TurnipPredictionTable()),
+                Expanded(child: TurnipPredictionTable()),
               ],
               crossAxisAlignment: CrossAxisAlignment.stretch,
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _TurnipPredictionTable extends StatelessWidget {
-  String mapMinMaxLabel(MinMax minMax) => '${minMax.min} - ${minMax.max}';
-
-  Widget _buildTableRow(TurnipPrediction prediction, BuildContext context) {
-    final items = Iterable.generate(weekDayString.length).map(
-      (weekDayIndex) {
-        final patterns = prediction.pattern;
-        return PriceItem(
-          weekday: weekDayString[weekDayIndex],
-          morningValue: patterns[weekDayIndex * 2].toWidgetText(),
-          afternoonValue: patterns[weekDayIndex * 2 + 1].toWidgetText(),
-        );
-      },
-    ).toList();
-
-    return Table(children: [
-      TableRow(children: [
-        Text(prediction.type.localizedDescription(context)),
-        const SizedBox(),
-        const SizedBox()
-      ]),
-      TableRow(children: items.sublist(0, 3)),
-      TableRow(children: items.sublist(3))
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = context.watch<TurnipPredictionProvider>();
-    final items = provider.patterns
-        .map((p) => _buildTableRow(p, context))
-        .toList(growable: false);
-    return ListView(
-      children: items,
-      cacheExtent: 100,
     );
   }
 }

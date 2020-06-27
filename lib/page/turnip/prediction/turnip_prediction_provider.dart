@@ -3,21 +3,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../core/model/turnip_price.dart';
-import '../../../core/model/turnip_price_prediction.dart';
+import '../../../core/model/model.dart';
 import '../../../core/price_prediction.dart';
-
-class TurnipPrediction {
-  final TurnipPricePattern type;
-  final List<MinMax<int>> pattern;
-  double probability;
-
-  TurnipPrediction(this.type, this.pattern, {this.probability});
-
-  @override
-  String toString() =>
-      'type: $type, pattern $pattern, probability: $probability';
-}
 
 class TurnipPredictionProvider extends ChangeNotifier {
   TurnipPrice currentPrice = TurnipPrice.empty();
@@ -26,7 +13,7 @@ class TurnipPredictionProvider extends ChangeNotifier {
 
   void computePrice(TurnipPrice price) {
     currentPrice = price;
-    const probabilitiesPerPattern = {
+    const patternProbabilities = {
       TurnipPricePattern.fluctuating: 140,
       TurnipPricePattern.largeSpike: 105,
       TurnipPricePattern.decreasing: 55,
@@ -49,12 +36,14 @@ class TurnipPredictionProvider extends ChangeNotifier {
     );
 
     final allPatternProb = countPreType.entries.fold(
-        0, (result, e) => result + probabilitiesPerPattern[e.key] * e.value);
+        0,
+        (prev, pattern) => pattern.value > 0
+            ? prev + patternProbabilities[pattern.key]
+            : prev);
 
     for (var p in patterns) {
-      p.probability = probabilitiesPerPattern[p.type] /
-          allPatternProb /
-          countPreType[p.type];
+      p.probability =
+          patternProbabilities[p.type] / allPatternProb / countPreType[p.type];
     }
 
     this.patterns = patterns;

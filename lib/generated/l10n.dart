@@ -332,6 +332,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Probability`
+  String get probability {
+    return Intl.message(
+      'Probability',
+      name: 'probability',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

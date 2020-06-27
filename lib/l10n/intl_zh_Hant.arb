@@ -29,5 +29,6 @@
   "decreasing": "遞減型",
   "copyLoginMagicLink": "複制快速登入連結",
   "magicLinkCopiedTitle": "登入連結已複制",
-  "magicLinkCopiedMessage": "你可以利用此連結在其他裝置快速登入本帳戶"
+  "magicLinkCopiedMessage": "你可以利用此連結在其他裝置快速登入本帳戶",
+  "probability": "機率"
 }

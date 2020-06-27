@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../../generated/l10n.dart';
+import '../price_prediction.dart';
 
 enum TurnipPricePattern {
   fluctuating,
@@ -25,4 +26,16 @@ extension TurnipPricePatternExtension on TurnipPricePattern {
         return '';
     }
   }
+}
+
+class TurnipPrediction {
+  final TurnipPricePattern type;
+  final List<MinMax<int>> pattern;
+  double probability;
+
+  TurnipPrediction(this.type, this.pattern, {this.probability});
+
+  @override
+  String toString() =>
+      'type: $type, pattern $pattern, probability: $probability';
 }
