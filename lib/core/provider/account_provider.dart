@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+import '../api/error.dart';
 import '../config.dart';
 import '../firebase_service.dart';
 import '../model/player.dart';
@@ -48,12 +50,12 @@ class AccountProvider extends ChangeNotifier {
       '${env.serverRoot}/v1/user',
       body: userData.toJson(),
     );
-
+    final json = jsonDecode(response.body);
     print('sign in');
     Player userResponse;
 
     if (response.statusCode == 200) {
-      userResponse = Player.fromJson(jsonDecode(response.body));
+      userResponse = Player.fromJson(json);
     }
 
     if (userResponse?.playerName != null || userResponse?.islandName != null) {
@@ -66,7 +68,7 @@ class AccountProvider extends ChangeNotifier {
       notifyListeners();
       return _userData;
     } else {
-      throw SigninError('sign in error');
+      throw ApiError.fromJson(json);
     }
   }
 }

@@ -5,8 +5,9 @@ part 'error.g.dart';
 @JsonSerializable()
 class ApiError extends Error {
   String error;
+  num errorCode;
 
-  ApiError(this.error);
+  ApiError(this.error, this.errorCode);
 
   factory ApiError.fromJson(Map<String, dynamic> json) =>
       _$ApiErrorFromJson(json);

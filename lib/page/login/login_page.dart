@@ -5,6 +5,7 @@ import '../../acnh_widget/acnh_page.dart';
 import '../../acnh_widget/alert.dart';
 import '../../acnh_widget/common_widget.dart';
 import '../../acnh_widget/raised_button_with_loading.dart';
+import '../../core/api/error.dart';
 import '../../core/deeplink/deeplink_data.dart';
 import '../../core/model/player.dart';
 import '../../core/provider/account_provider.dart';
@@ -98,15 +99,20 @@ class _LoginFormState extends State<_LoginForm> {
         islandName: getFieldValue(T.islandName),
         pinCode: getFieldValue(T.loginPagePinCode)?.toUpperCase());
 
+    const defaultErrorMessage = 'Signin fail, please try again later';
+
     try {
       await provider.signin(user);
-    } on SigninError catch (err) {
-      debugPrint('Login error ${err.message}');
-      await showAlertMessage(context, T.loginPageLoginErrorTitle, err.message);
-    } on Exception catch (err) {
-      debugPrint('Login with exception ${err.toString()}');
+    } on ApiError catch (err) {
+      debugPrint('Login error ${err.error}');
       await showAlertMessage(
-          context, 'Login fail', 'Signin fail, please try again later');
+        context,
+        T.loginPageLoginErrorTitle,
+        err.error ?? defaultErrorMessage,
+      );
+    } on Exception catch (ex) {
+      debugPrint('Login with exception ${ex.toString()}');
+      await showAlertMessage(context, 'Login fail', defaultErrorMessage);
     }
   }
 

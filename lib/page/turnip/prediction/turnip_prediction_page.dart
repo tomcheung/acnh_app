@@ -10,10 +10,11 @@ import '../../../core/model/turnip_price.dart';
 import '../../../core/price_prediction.dart';
 import '../../../core/util/date.dart';
 import '../../../generated/l10n.dart';
+import '../turnip_page.dart';
 import 'turnip_prediction_provider.dart';
 import 'turnip_prediction_table.dart';
 
-enum _PredictionPageMoreOptions { openExternalLink }
+enum _PredictionPageMoreOptions { openAcTurnip, openTurnipProphet }
 
 extension MinMaxWidgetString on MinMax {
   String toWidgetText() => '${this.min} - ${this.max}';
@@ -142,23 +143,32 @@ class _TurnipPredictionChart extends StatelessWidget {
 class TurnipPredictionPage extends StatelessWidget {
   static const routeName = '/turnip/prediction';
 
-  _openExternalPage(BuildContext context) async {
-    final TurnipPredictionArguments args =
-        ModalRoute.of(context).settings.arguments;
-    final param = args.inputPrice.toList().fold(
-        '', (prev, price) => '$prev-${(price > 0) ? price.toString() : ''}');
-    final url = 'https://ac-turnip.com/share?f=$param';
+  _openExternalWebView(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     }
   }
 
   _handleMoreMenu(BuildContext context, _PredictionPageMoreOptions option) {
+    final TurnipPredictionArguments args =
+        ModalRoute.of(context).settings.arguments;
+    final inputPrice = args.inputPrice.toList();
+    var url = '';
     switch (option) {
-      case _PredictionPageMoreOptions.openExternalLink:
-        _openExternalPage(context);
-        return;
+      case _PredictionPageMoreOptions.openAcTurnip:
+        final param = inputPrice
+            .map((price) => (price > 0) ? price.toString() : '')
+            .join('-');
+        url = 'https://ac-turnip.com/share?f=$param';
+        break;
+      case _PredictionPageMoreOptions.openTurnipProphet:
+        final param = inputPrice
+            .map((price) => (price > 0) ? price.toString() : '')
+            .join('.');
+        url = 'https://turnipprophet.io?prices=$param';
+      break;
     }
+    _openExternalWebView(url);
   }
 
   @override
@@ -176,12 +186,19 @@ class TurnipPredictionPage extends StatelessWidget {
           onSelected: (option) => _handleMoreMenu(context, option),
           itemBuilder: (context) => [
             PopupMenuItem(
-              value: _PredictionPageMoreOptions.openExternalLink,
+              value: _PredictionPageMoreOptions.openAcTurnip,
               child: ListTile(
-                leading: Icon(Icons.open_in_browser),
                 title: Text('Open in ac-turnip.com'),
                 dense: true,
-                contentPadding: EdgeInsets.all(0),
+                contentPadding: const EdgeInsets.all(0),
+              ),
+            ),
+            PopupMenuItem(
+              value: _PredictionPageMoreOptions.openTurnipProphet,
+              child: ListTile(
+                title: Text('Open in Turnip Prophet'),
+                dense: true,
+                contentPadding: const EdgeInsets.all(0),
               ),
             )
           ],

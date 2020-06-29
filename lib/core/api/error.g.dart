@@ -9,6 +9,7 @@ part of 'error.dart';
 ApiError _$ApiErrorFromJson(Map<String, dynamic> json) {
   return ApiError(
     json['error'] as String,
+    json['errorCode'] as num,
   );
 }
 
@@ -22,5 +23,6 @@ Map<String, dynamic> _$ApiErrorToJson(ApiError instance) {
   }
 
   writeNotNull('error', instance.error);
+  writeNotNull('errorCode', instance.errorCode);
   return val;
 }

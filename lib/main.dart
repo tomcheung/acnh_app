@@ -114,6 +114,11 @@ class AcnhApp extends StatelessWidget {
           return LoginPage();
         }
 
+        if (settings.name == TurnipPredictionPage.routeName &&
+            !(settings.arguments is TurnipPredictionArguments)) {
+          return TurnipHomePage();
+        }
+
         return _routeMapping[settings?.name] ?? TurnipHomePage();
       },
       settings: settings,
