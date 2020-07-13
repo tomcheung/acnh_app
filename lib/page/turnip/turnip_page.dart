@@ -1,3 +1,4 @@
+import 'package:acnhpal/acnh_widget/ac_button.dart';
 import 'package:flutter/material.dart' hide TextField;
 import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbols.dart';
@@ -198,28 +199,22 @@ class _TurnipActions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: _TurnipInputForm()),
-          RaisedButton(
+          AcButton.text(
+            text: S.of(context).clearAllData,
             color: Colors.red,
             onPressed: () {
               _showClearDataAlert(context);
             },
-            child: Text(
-              S.of(context).clearAllData,
-              style: textStyle,
-            ),
           ),
           const SizedBox(height: 16),
           SizedBox(
             height: 48,
-            child: RaisedButton(
+            child: AcButton.text(
               color: theme.primaryColor,
               onPressed: () {
                 _toPricePredictPage(context);
               },
-              child: Text(
-                T.turnipPredictPrice,
-                style: textStyle,
-              ),
+              text: T.turnipPredictPrice,
             ),
           ),
         ],

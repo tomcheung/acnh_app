@@ -1,3 +1,4 @@
+import 'package:acnhpal/acnh_widget/ac_button.dart';
 import 'package:flutter/material.dart' hide TextField, Card;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -96,7 +97,7 @@ class ProfilePage extends StatelessWidget {
                   await accountProvider.signOut();
                   Navigator.popAndPushNamed(context, '/');
                 },
-              )
+              ),
             ],
           ),
         ),
